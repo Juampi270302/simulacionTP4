@@ -12,11 +12,14 @@ const SimulationParameters = () => {
     useEffect(() => {
         validateHoraInicio();
     }, [params.initTimeView, params.cantTimeSim]);
+    useEffect(() => {
+        validateTimeInitTc();
+    }, [params.timeInitTC, params.timeTC, params.timeMin]);
 
     const initialState = {
         probMasUno: false,
-        minMaxTC: false,
-        minMinTC: false,
+        minInitTC: false,
+        minFinTC: false,
         horaInicioMax: false,
         probActual: 0
     };
@@ -25,10 +28,10 @@ const SimulationParameters = () => {
         switch (action.type) {
             case 'probMasUno':
                 return {...errors, probMasUno: action.value};
-            case 'minMaxTC':
-                return {...errors, minMaxTC: action.value};
-            case 'minMinTC':
-                return {...errors, minMinTC: action.value};
+            case 'minFinTC':
+                return {...errors, minFinTC: action.value};
+            case 'minInitTC':
+                return {...errors, minInitTC: action.value};
             case 'horaInicioMax':
                 return {...errors, horaInicioMax: action.value};
             case "probActual":
@@ -59,6 +62,14 @@ const SimulationParameters = () => {
         }
     }
 
+    const validateTimeInitTc = () => {
+        if (params.timeInitTC >= (params.timeTC * 60) - params.timeMin) {
+            setErrors({type: 'minInitTC', value: true});
+        } else {
+            setErrors({type: 'minInitTC', value: false});
+        }
+    }
+
     return (
         <div className="container-fluid">
             <div className="row d-flex justify-content-center mt-4">
@@ -84,17 +95,41 @@ const SimulationParameters = () => {
                             <div className="row d-flex justify-content-center">
                                 <div className="col-6 d-flex flex-column text-center">
                                     <label>Tiempo medio en menos</label>
-                                    <input type="number" className="form-control" defaultValue={5} min={0}
+                                    <input type="number"
+                                           className="form-control"
+                                           defaultValue={5}
+                                           min={0}
+                                           step={0.01}
+                                           value={params.timeMin}
                                            onChange={() => {
-                                               updateParams({type: 'setTimeMin', value: parseFloat(event.target.value)})
+                                               if (event.target.value >= 0) {
+                                                   updateParams({
+                                                       type: 'setTimeMin',
+                                                       value: parseFloat(event.target.value)
+                                                   })
+                                               } else {
+                                                   updateParams({type: 'setTimeMin', value: parseFloat(0)})
+                                               }
                                            }}
                                     />
                                 </div>
                                 <div className="col-6 d-flex flex-column text-center">
                                     <label>Tiempo medio en mas</label>
-                                    <input type="number" className="form-control" defaultValue={5} min={0}
+                                    <input type="number"
+                                           className="form-control"
+                                           defaultValue={5}
+                                           min={0}
+                                           step={0.01}
+                                           value={params.timeMax}
                                            onChange={() => {
-                                               updateParams({type: 'setTimeMax', value: parseFloat(event.target.value)})
+                                               if (event.target.value >= 0) {
+                                                   updateParams({
+                                                       type: 'setTimeMax',
+                                                       value: parseFloat(event.target.value)
+                                                   })
+                                               } else {
+                                                   updateParams({type: 'setTimeMax', value: parseFloat(0)})
+                                               }
                                            }}/>
                                 </div>
                             </div>
@@ -110,12 +145,25 @@ const SimulationParameters = () => {
                             <div className="row d-flex justify-content-center">
                                 <div className="col-6 d-flex flex-column text-center">
                                     <label>Minutos despues de inicio</label>
-                                    <input type="number" className="form-control" defaultValue={15} min={1}
+                                    <input type="number"
+                                           className="form-control"
+                                           defaultValue={15}
+                                           min={0}
+                                           step={0.01}
+                                           value={params.timeInitTC}
                                            onChange={() => {
-                                               updateParams({
-                                                   type: 'setTimeInitTC',
-                                                   value: parseFloat(event.target.value)
-                                               })
+                                               if (event.target.value > 0) {
+                                                   console.log(errors.minInitTC)
+                                                   updateParams({
+                                                       type: 'setTimeInitTC',
+                                                       value: parseFloat(event.target.value)
+                                                   })
+                                               } else {
+                                                   updateParams({
+                                                       type: 'setTimeInitTC',
+                                                       value: parseFloat(0)
+                                                   })
+                                               }
                                            }}/>
                                 </div>
                                 <div className="col-6 d-flex flex-column text-center">
@@ -128,6 +176,8 @@ const SimulationParameters = () => {
                                                })
                                            }}/>
                                 </div>
+                                {errors.minInitTC &&
+                                    <span>El tiempo desde inicio debe ser menor al tiempo medio menos el tiempo en menos</span>}
                             </div>
                         </div>
                     </div>
@@ -145,30 +195,58 @@ const SimulationParameters = () => {
                             <div className="row d-flex justify-content-center">
                                 <div className="col-4 d-flex flex-column text-center">
                                     <label>Cantidad de tiempo</label>
-                                    <input type="number" className="form-control" defaultValue={100} min={1}
+                                    <input type="number"
+                                           className="form-control"
+                                           defaultValue={100}
+                                           min={1}
+                                           step={0.01}
+                                           value={params.cantTimeSim}
                                            onChange={() => {
-                                               updateParams({
-                                                   type: 'setCantTimeSim',
-                                                   value: parseFloat(event.target.value)
-                                               })
+                                               if (event.target.value >= 1) {
+                                                   updateParams({
+                                                       type: 'setCantTimeSim',
+                                                       value: parseFloat(event.target.value)
+                                                   })
+                                               } else {
+                                                   updateParams({
+                                                       type: 'setCantTimeSim',
+                                                       value: parseFloat(1)
+                                                   })
+                                               }
                                            }}/>
                                 </div>
                                 <div className="col-4 d-flex flex-column text-center">
                                     <label>Hora inicio</label>
-                                    <input type="number" className="form-control" defaultValue={50} min={1}
+                                    <input type="number"
+                                           className="form-control"
+                                           defaultValue={50}
+                                           min={0}
+                                           step={0.01}
+                                           value={params.initTimeView}
                                            onChange={() => {
-                                               updateParams({
-                                                   type: 'setInitTimeView',
-                                                   value: parseFloat(event.target.value)
-                                               })
+                                               if (event.target.value > 0) {
+                                                   updateParams({
+                                                       type: 'setInitTimeView',
+                                                       value: parseFloat(event.target.value)
+                                                   })
+                                               } else {
+                                                   updateParams({
+                                                       type: 'setInitTimeView',
+                                                       value: parseFloat(0)
+                                                   })
+                                               }
                                            }}/>
                                 </div>
                                 <div className="col-4 d-flex flex-column text-center">
                                     <label>Cantidad iteraciones</label>
-                                    <input type="number" className="form-control" defaultValue={50} min={0}
+                                    <input type="number"
+                                           className="form-control"
+                                           defaultValue={50}
+                                           min={0}
+                                           step={1}
                                            value={params.cantSimIterations}
                                            onChange={() => {
-                                               if(event.target.value > 1){
+                                               if (event.target.value >= 1) {
                                                    updateParams({
                                                        type: 'setCantSimIterations',
                                                        value: parseFloat(event.target.value)
@@ -177,7 +255,8 @@ const SimulationParameters = () => {
                                                    updateParams({
                                                        type: 'setCantSimIterations',
                                                        value: parseFloat(0)
-                                               })}
+                                                   })
+                                               }
                                            }}/>
                                 </div>
                             </div>
