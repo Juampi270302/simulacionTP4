@@ -19,50 +19,50 @@ const initialState = {
     initTimeView: 50,
     cantSimIterations: 50
 };
-5
 
-function reducer(state, action) {
+
+function reducer(params, action) {
     switch (action.type) {
         case 'setProbTA':
-            return {...state, probTA: action.value};
+            return {...params, probTA: action.value};
         case 'setProbTB':
-            return {...state, probTB: action.value};
+            return {...params, probTB: action.value};
         case 'setProbTC':
-            return {...state, probTC: action.value};
+            return {...params, probTC: action.value};
         case 'setProbTD':
-            return {...state, probTD: action.value};
+            return {...params, probTD: action.value};
         case 'setTimeTA':
-            return {...state, timeTA: action.value};
+            return {...params, timeTA: action.value};
         case 'setTimeTB':
-            return {...state, timeTB: action.value};
+            return {...params, timeTB: action.value};
         case 'setTimeTC':
-            return {...state, timeTC: action.value};
+            return {...params, timeTC: action.value};
         case 'setTimeTD':
-            return {...state, timeTD: action.value};
+            return {...params, timeTD: action.value};
         case 'setTimeMin':
-            return {...state, timeMin: action.value};
+            return {...params, timeMin: action.value};
         case 'setTimeMax':
-            return {...state, timeMax: action.value};
+            return {...params, timeMax: action.value};
         case 'setTimeInitTC':
-            return {...state, timeInitTC: action.value};
+            return {...params, timeInitTC: action.value};
         case 'setTimeEndTC':
-            return {...state, timeEndTC: action.value};
+            return {...params, timeEndTC: action.value};
         case 'setCantTimeSim':
-            return {...state, cantTimeSim: action.value};
+            return {...params, cantTimeSim: action.value};
         case 'setInitTimeView':
-            return {...state, initTimeView: action.value};
+            return {...params, initTimeView: action.value};
         case 'setCantSimIterations':
-            return {...state, cantSimIterations: action.value};
+            return {...params, cantSimIterations: action.value};
         default:
             throw new Error();
     }
 }
 
 export const ContextoSimulacionHandler = ({children}) => {
-    const [state, dispatch] = useReducer(reducer, initialState);
-    console.log(state)
+    const [params, updateParams] = useReducer(reducer, initialState);
+    console.log(params)
     return (
-        <ContextoSimulacion.Provider value={{state, dispatch}}>
+        <ContextoSimulacion.Provider value={{params, updateParams}}>
             {children}
         </ContextoSimulacion.Provider>
     )
