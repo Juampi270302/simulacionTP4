@@ -1,4 +1,3 @@
-import './App.css'
 import {ContextoSimulacionHandler} from "./contexts/ContextoSimulacion.jsx";
 import TableTimeProb from "./components/TableTimeProb.jsx";
 import TableStateVector from "./components/TableStateVector.jsx";
@@ -10,10 +9,14 @@ function App() {
         <ContextoSimulacionHandler>
             <div className="container-fluid">
                 <div className="row">
-                    <Header></Header>
+                    <div className="col-12">
+                        <Header></Header>
+                    </div>
                 </div>
-                <div className="row">
-                    <SimulationParameters></SimulationParameters>
+                <div className="row d-flex justify-content-center">
+                    <div className="col-6 ">
+                        <SimulationParameters></SimulationParameters>
+                    </div>
                 </div>
             </div>
         </ContextoSimulacionHandler>
