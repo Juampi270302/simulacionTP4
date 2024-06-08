@@ -60,9 +60,9 @@ function reducer(params, action) {
 
 export const ContextoSimulacionHandler = ({children}) => {
     const [params, updateParams] = useReducer(reducer, initialState);
-    console.log(params)
+    const [stateVector, setStateVector] = useState(null);
     return (
-        <ContextoSimulacion.Provider value={{params, updateParams}}>
+        <ContextoSimulacion.Provider value={{params, updateParams, setStateVector}}>
             {children}
         </ContextoSimulacion.Provider>
     )

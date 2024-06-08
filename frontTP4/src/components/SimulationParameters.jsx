@@ -1,10 +1,12 @@
 import React, {useContext, useState, useReducer, useEffect} from 'react';
 import TableTimeProb from "./TableTimeProb.jsx";
 import {ContextoSimulacion} from "../contexts/ContextoSimulacion.jsx";
+import "../styles/Estilos.css";
+import {getSimulacion} from "../scripts/HttpRequests.js"
 
 const SimulationParameters = () => {
 
-    const {updateParams, params} = useContext(ContextoSimulacion);
+    const {updateParams, params, setStateVector} = useContext(ContextoSimulacion);
 
     useEffect(() => {
         validateProb();
@@ -13,13 +15,12 @@ const SimulationParameters = () => {
         validateHoraInicio();
     }, [params.initTimeView, params.cantTimeSim]);
     useEffect(() => {
-        validateTimeInitTc();
-    }, [params.timeInitTC, params.timeTC, params.timeMin]);
+        validateTimeFinTC();
+    }, [params.timeEndTC, params.timeTC, params.timeMin, params.timeInitTC])
 
     const initialState = {
         probMasUno: false,
-        minInitTC: false,
-        minFinTC: false,
+        minInitFinTC: false,
         horaInicioMax: false,
         probActual: 0
     };
@@ -28,10 +29,8 @@ const SimulationParameters = () => {
         switch (action.type) {
             case 'probMasUno':
                 return {...errors, probMasUno: action.value};
-            case 'minFinTC':
-                return {...errors, minFinTC: action.value};
-            case 'minInitTC':
-                return {...errors, minInitTC: action.value};
+            case 'minInitFinTC':
+                return {...errors, minInitFinTC: action.value};
             case 'horaInicioMax':
                 return {...errors, horaInicioMax: action.value};
             case "probActual":
@@ -62,13 +61,25 @@ const SimulationParameters = () => {
         }
     }
 
-    const validateTimeInitTc = () => {
-        if (params.timeInitTC >= (params.timeTC * 60) - params.timeMin) {
-            setErrors({type: 'minInitTC', value: true});
+    const validateTimeFinTC = () =>{
+        if(params.timeInitTC + params.timeEndTC >= (params.timeTC * 60)- params.timeMin){
+            setErrors({type: 'minInitFinTC', value: true});
         } else {
-            setErrors({type: 'minInitTC', value: false});
+            setErrors({type: 'minInitFinTC', value: false});
         }
     }
+    const sendData = async () => {
+        console.log(params)
+        /*await getSimulacion(params)
+            .then(data => {
+                console.log(data);
+                setStateVector(data);
+            })
+            .catch(error => {
+                console.log(error);
+            })*/
+    }
+
 
     return (
         <div className="container-fluid">
@@ -76,11 +87,15 @@ const SimulationParameters = () => {
                 <div className="col-12 ">
                     <div className="card">
                         <div className="card-body">
-                            <TableTimeProb></TableTimeProb>
-                            {errors.probMasUno &&
-                                <span className="text-danger">
-                                    Error,la suma de las probabilidades debe ser de 1(Valor actual: {errors.probActual})
+                            <div className="row d-flex justify-content-center textoTitulo">
+                                Probabilidades trabajo C
+                            </div>
+                            <div className="row d-flex justify-content-center">
+                                <TableTimeProb></TableTimeProb>
+                                {errors.probMasUno && <span className="errores text-center mt-0">
+                                    Error,la suma de las probabilidades debe ser de 1 (Valor actual: {errors.probActual})
                                 </span>}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -89,14 +104,14 @@ const SimulationParameters = () => {
                 <div className="col-6 d-flex flex-column">
                     <div className="card">
                         <div className="card-body">
-                            <div className="row d-flex justify-content-center">
+                            <div className="row d-flex justify-content-center textoTitulo">
                                 Intervalos de tiempo medio
                             </div>
                             <div className="row d-flex justify-content-center">
                                 <div className="col-6 d-flex flex-column text-center">
-                                    <label>Tiempo medio en menos</label>
+                                    <label className="textoSubTitulo">Tiempo medio en menos</label>
                                     <input type="number"
-                                           className="form-control"
+                                           className="form-control textoBasico"
                                            defaultValue={5}
                                            min={0}
                                            step={0.01}
@@ -114,9 +129,9 @@ const SimulationParameters = () => {
                                     />
                                 </div>
                                 <div className="col-6 d-flex flex-column text-center">
-                                    <label>Tiempo medio en mas</label>
+                                    <label className="textoSubTitulo">Tiempo medio en mas</label>
                                     <input type="number"
-                                           className="form-control"
+                                           className="form-control textoBasico"
                                            defaultValue={5}
                                            min={0}
                                            step={0.01}
@@ -139,14 +154,14 @@ const SimulationParameters = () => {
                 <div className="col-6 d-flex flex-column">
                     <div className="card">
                         <div className="card-body">
-                            <div className="row d-flex justify-content-center">
+                            <div className="row d-flex justify-content-center textoTitulo">
                                 Parametros trabajos C
                             </div>
                             <div className="row d-flex justify-content-center">
                                 <div className="col-6 d-flex flex-column text-center">
-                                    <label>Minutos despues de inicio</label>
+                                    <label className="textoSubTitulo">Minutos despues de inicio</label>
                                     <input type="number"
-                                           className="form-control"
+                                           className="form-control textoBasico"
                                            defaultValue={15}
                                            min={0}
                                            step={0.01}
@@ -167,8 +182,8 @@ const SimulationParameters = () => {
                                            }}/>
                                 </div>
                                 <div className="col-6 d-flex flex-column text-center">
-                                    <label>Minutos antes del final</label>
-                                    <input type="number" className="form-control" defaultValue={15} min={1}
+                                    <label className="textoSubTitulo">Minutos antes del final</label>
+                                    <input type="number" className="form-control textoBasico" defaultValue={15} min={1}
                                            onChange={() => {
                                                updateParams({
                                                    type: 'setTimeEndTC',
@@ -176,9 +191,9 @@ const SimulationParameters = () => {
                                                })
                                            }}/>
                                 </div>
-                                {errors.minInitTC &&
-                                    <span>El tiempo desde inicio debe ser menor al tiempo medio menos el tiempo en menos</span>}
                             </div>
+                            {errors.minInitFinTC &&
+                            <span className="errores">Error, la suma de los minutos despues de inicio y antes de final debe ser menor a el minimo de tiempo C</span>}
                         </div>
                     </div>
                 </div>
@@ -188,15 +203,15 @@ const SimulationParameters = () => {
                     <div className="card">
                         <div className="card-body">
                             <div className="row d-flex justify-content-center">
-                                <div className="col-12 text-center">
+                                <div className="col-12 text-center textoTitulo">
                                     Parametros tecnicos de la simulacion
                                 </div>
                             </div>
                             <div className="row d-flex justify-content-center">
                                 <div className="col-4 d-flex flex-column text-center">
-                                    <label>Cantidad de tiempo</label>
+                                    <label className="textoSubTitulo">Cantidad de tiempo</label>
                                     <input type="number"
-                                           className="form-control"
+                                           className="form-control textoBasico"
                                            defaultValue={100}
                                            min={1}
                                            step={0.01}
@@ -216,9 +231,9 @@ const SimulationParameters = () => {
                                            }}/>
                                 </div>
                                 <div className="col-4 d-flex flex-column text-center">
-                                    <label>Hora inicio</label>
+                                    <label className="textoSubTitulo">Hora inicio</label>
                                     <input type="number"
-                                           className="form-control"
+                                           className="form-control textoBasico"
                                            defaultValue={50}
                                            min={0}
                                            step={0.01}
@@ -238,9 +253,9 @@ const SimulationParameters = () => {
                                            }}/>
                                 </div>
                                 <div className="col-4 d-flex flex-column text-center">
-                                    <label>Cantidad iteraciones</label>
+                                    <label className="textoSubTitulo">Cantidad iteraciones</label>
                                     <input type="number"
-                                           className="form-control"
+                                           className="form-control textoBasico"
                                            defaultValue={50}
                                            min={0}
                                            step={1}
@@ -261,7 +276,7 @@ const SimulationParameters = () => {
                                 </div>
                             </div>
                             {errors.horaInicioMax &&
-                                <span className="text-danger">
+                                <span className="errores">
                                     Error, la hora de inicio no puede ser mayor o igual a la cantidad de tiempo
                                 </span>}
                         </div>
@@ -271,7 +286,7 @@ const SimulationParameters = () => {
 
             <div className="row d-flex justify-content-center mt-2">
                 <div className="col-2">
-                    <button type="button" className="btn btn-success">Simular</button>
+                    <button type="button" className="btn btn-success" onClick={sendData}>Simular</button>
                 </div>
             </div>
         </div>

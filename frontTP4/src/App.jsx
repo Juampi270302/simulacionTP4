@@ -8,12 +8,12 @@ function App() {
     return (
         <ContextoSimulacionHandler>
             <div className="container-fluid">
-                <div className="row">
+                <div className="row header">
                     <div className="col-12">
                         <Header></Header>
                     </div>
                 </div>
-                <div className="row d-flex justify-content-center">
+                <div className="row d-flex justify-content-center body">
                     <div className="col-6 ">
                         <SimulationParameters></SimulationParameters>
                     </div>
