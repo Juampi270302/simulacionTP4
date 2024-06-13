@@ -1,13 +1,12 @@
-import React, {useContext, useState, useReducer, useEffect} from 'react';
+import React, {useContext, useState, useReducer, useEffect, useMemo} from 'react';
 import TableTimeProb from "./TableTimeProb.jsx";
 import {ContextoSimulacion} from "../contexts/ContextoSimulacion.jsx";
 import "../styles/Estilos.css";
 import {getSimulacion} from "../scripts/HttpRequests.js"
 
-const SimulationParameters = () => {
+const SimulationParameters = ({setfilas}) => {
 
-    const {updateParams, params, setStateVector} = useContext(ContextoSimulacion);
-
+    const {updateParams, params} = useContext(ContextoSimulacion);
     useEffect(() => {
         validateProb();
     }, [params.probTA, params.probTB, params.probTC, params.probTD]);
@@ -44,7 +43,6 @@ const SimulationParameters = () => {
 
     const validateProb = () => {
         let sum = params.probTA + params.probTB + params.probTC + params.probTD;
-        console.log(sum)
         if (sum !== 1) {
             setErrors({type: 'probMasUno', value: true});
             setErrors({type: 'probActual', value: sum});
@@ -69,17 +67,14 @@ const SimulationParameters = () => {
         }
     }
     const sendData = async () => {
-        console.log(params)
-        /*await getSimulacion(params)
-            .then(data => {
-                console.log(data);
-                setStateVector(data);
-            })
-            .catch(error => {
-                console.log(error);
-            })*/
-    }
-
+        try {
+            const response = await getSimulacion(params);
+            console.log(response);
+            setfilas(response);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     return (
         <div className="container-fluid">

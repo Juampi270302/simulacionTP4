@@ -1,13 +1,12 @@
 import axios from "axios";
 
 export const getSimulacion = async (data) => {
-    await axios.post("url", data)
-        .then(response => {
-            console.log(response.data);
-            return response.data;
-        })
-        .catch(error => {
-            console.log(error);
-        })
+    try {
+        const response = await axios.post("http://localhost:8080/api/simular", data);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
 };
 
