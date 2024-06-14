@@ -100,7 +100,7 @@ const SimulationParameters = ({setfilas}) => {
                     <div className="card">
                         <div className="card-body">
                             <div className="row d-flex justify-content-center textoTitulo">
-                                Intervalos de tiempo medio
+                                Limite superior e inferior de tiempo medio
                             </div>
                             <div className="row d-flex justify-content-center">
                                 <div className="col-6 d-flex flex-column text-center">

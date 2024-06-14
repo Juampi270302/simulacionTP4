@@ -6,7 +6,7 @@ import SimulationParameters from "./components/SimulationParameters.jsx";
 import {useContext, useState} from "react";
 
 function App() {
-    const [filas, setfilas] = useState(null);
+    const [vectorEstados, setvectorEstados] = useState(null);
     return (
         <ContextoSimulacionHandler>
             <div className="container-fluid body">
@@ -17,12 +17,12 @@ function App() {
                 </div>
                 <div className="row d-flex justify-content-center body">
                     <div className="col-6 ">
-                        <SimulationParameters setfilas={setfilas}></SimulationParameters>
+                        <SimulationParameters setfilas={setvectorEstados}></SimulationParameters>
                     </div>
                 </div>
                 <div className="row d-flex justify-content-center body mt-4">
                     <div className="col-12 ">
-                        {filas && <TableStateVector filas={filas}></TableStateVector>}
+                        {vectorEstados && <TableStateVector vectorEstados={vectorEstados}></TableStateVector>}
                     </div>
                 </div>
             </div>

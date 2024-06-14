@@ -49,3 +49,27 @@
     background-color: #F2F4F3 !important;
 }
 
+.bordeIzquierdo{
+    border-left-width: 3px;
+    border-left-color: black;
+}
+
+.bordeDerecho{
+    border-right-width: 3px;
+    border-right-color: black;
+}
+
+.bordeArriba{
+    border-top-width: 3px;
+    border-top-color: black;
+}
+
+.bordeAbajo{
+    border-bottom-width: 3px;
+    border-bottom-color: black;
+}
+
+.selected {
+    background-color: #f5f5f5 !important;
+}
+
