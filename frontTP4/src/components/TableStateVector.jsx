@@ -1,30 +1,36 @@
 import React, {useContext, useEffect, useMemo, useState} from 'react';
 import {ContextoSimulacion} from "../contexts/ContextoSimulacion.jsx";
+import {getDatosPaginados} from "../scripts/HttpRequests.js";
 
-const TableStateVector = ({vectorEstados}) => {
-    const [page, setPage] = useState(1);
-    const [selectedRow, setSelectedRow] = useState(null);
+const TableStateVector = ({calculosSimulacion}) => {
+    const [filasPagina, setFilasPagina] = useState([]);
 
-    const filasPagina = useMemo(() => {
-        const startIdx = (page - 1) * 1000;
-        // eslint-disable-next-line react/prop-types
-        const endIdx = Math.min(startIdx + 1000, vectorEstados.filas.length);
-        // eslint-disable-next-line react/prop-types
-        return vectorEstados.filas.slice(startIdx, endIdx);
-    }, [vectorEstados, page]);
-
-    const lengthData = vectorEstados.filas.length;
-    const pages = Math.ceil(lengthData / 1000);
-    let pagesArray = [];
+    const pages = Math.ceil(calculosSimulacion.cantidadFilas / 1000);
+    let pagesArray = ["Seleccione fila"];
     for (let i = 1; i <= pages; i++) {
         pagesArray.push(i);
     }
+
+    const getDatos = async (page) => {
+        try {
+            console.log(page);
+            if (page !== "Seleccione fila") {
+                const response = await getDatosPaginados(page - 1);
+                setFilasPagina(response);
+                console.log(response.filas);
+            }
+
+        }
+        catch (e)
+        {console.log(e)}
+    }
+
     return (
         <>
             <div className="row d-flex">
                 <div className="col-4 d-flex justify-content-center">
                     <select className="form-select" onChange={(e) => {
-                        setPage(e.target.value)
+                        getDatos(e.target.value)
                     }}>
                         {pagesArray && pagesArray.map((p) => {
                             return (<option value={p} key={p}>{p}</option>)
@@ -33,17 +39,17 @@ const TableStateVector = ({vectorEstados}) => {
                 </div>
                 <div className="col-4 d-flex justify-content-center flex-column text-center">
                     <label className="textoTitulo">Promedio permanencia</label>
-                    <label className="textoSubTitulo">{vectorEstados.promedioPermanencia.toFixed(2)}</label>
+                    <label className="textoSubTitulo">{calculosSimulacion.promedioPermanencia.toFixed(2)}</label>
                 </div>
                 <div className="col-4 d-flex justify-content-center flex-column text-center">
                     <label className="textoTitulo">Porcentaje ocupacion</label>
-                    <label className="textoSubTitulo">{vectorEstados.porcentajeOcupacionServidor.toFixed(2)}</label>
+                    <label className="textoSubTitulo">{calculosSimulacion.porcentajeOcupacionServidor.toFixed(2)}</label>
                 </div>
             </div>
             <div className="row mt-2">
                 <div className="col-12 container-fluid justify-content-center">
 
-                    {vectorEstados &&
+                    {calculosSimulacion &&
                         <table className="table table-hover">
                             <thead>
                             <tr>
@@ -99,28 +105,26 @@ const TableStateVector = ({vectorEstados}) => {
                                 <th scope="col" className="bordeAbajo">Hora fin ocupacion</th>
                                 <th scope="col" className="bordeIzquierdo bordeAbajo">Tiempo ocupacion</th>
                                 <th scope="col" className="bordeDerecho bordeAbajo">Tiempo permanencia equipos</th>
-                                {
-                                    vectorEstados.cantidadEquipos > 0 &&
-                                    vectorEstados.filas[vectorEstados.filas.length - 1].equipos.map((equipo, index) => (
-                                        <>
-                                            <th scope="col" className="bordeIzquierdo bordeArriba bordeAbajo">
-                                                Id equipo</th>
-                                            <th scope="col" className="bordeAbajo bordeArriba">Tipo trabajo</th>
-                                            <th scope="col" className="bordeAbajo bordeArriba">Estado</th>
-                                            <th scope="col" className="bordeAbajo bordeArriba">Hora llegada</th>
-                                            <th scope="col" className="bordeAbajo bordeArriba">Hora inicio atencion</th>
-                                            <th scope="col" className="bordeAbajo bordeArriba">Hora fin atencion estimada</th>
-                                            <th scope="col" className="bordeAbajo bordeArriba">Hora salida</th>
-                                        </>
-                                    ))
-                                }
+                                {/*{*/}
+                                {/*    vectorEstados.cantidadEquipos > 0 &&*/}
+                                {/*    vectorEstados.filas[vectorEstados.filas.length - 1].equipos.map((equipo, index) => (*/}
+                                {/*        <>*/}
+                                {/*            <th scope="col" className="bordeIzquierdo bordeArriba bordeAbajo">*/}
+                                {/*                Id equipo</th>*/}
+                                {/*            <th scope="col" className="bordeAbajo bordeArriba">Tipo trabajo</th>*/}
+                                {/*            <th scope="col" className="bordeAbajo bordeArriba">Estado</th>*/}
+                                {/*            <th scope="col" className="bordeAbajo bordeArriba">Hora llegada</th>*/}
+                                {/*            <th scope="col" className="bordeAbajo bordeArriba">Hora inicio atencion</th>*/}
+                                {/*            <th scope="col" className="bordeAbajo bordeArriba">Hora fin atencion estimada</th>*/}
+                                {/*            <th scope="col" className="bordeAbajo bordeArriba">Hora salida</th>*/}
+                                {/*        </>*/}
+                                {/*    ))*/}
+                                {/*}*/}
                             </tr>
                             </thead>
                             <tbody>
-                            {filasPagina.map((fila, indice) => (
-                                <tr key={indice}
-                                    className={indice === selectedRow ? 'selected' : ''}
-                                    onClick={() => setSelectedRow(indice === selectedRow ? null : indice)}>
+                            {filasPagina && filasPagina.filas.map((fila, indice) => (
+                                <tr key={indice}>
                                     <td className="bordeIzquierdo">{fila.evento}</td>
                                     <td className="bordeIzquierdo">{fila.reloj.toFixed(2)}</td>
                                     <td className="bordeIzquierdo">{fila.llegada.rndLlegada.toFixed(2)}</td>
@@ -144,117 +148,6 @@ const TableStateVector = ({vectorEstados}) => {
                                     <td>{fila.servidor.horaFinOcupacion.toFixed(2)}</td>
                                     <td className="bordeIzquierdo">{fila.servidor.tiempoOcupacionAcum.toFixed(2)}</td>
                                     <td className="bordeDerecho">{fila.servidor.tiempoPermanenciaEquipoAcum.toFixed(2)}</td>
-                                    {
-                                        vectorEstados.cantidadEquipos > 0 && indice !== filasPagina.length - 1 &&
-                                        fila.equipos.map((equipo, index) => {
-                                            if ((indice > 0
-                                                && indice < filasPagina.length - 1) &&
-                                                equipo !== null &&
-                                                (equipo.equipo_estado === "Atendido"
-                                                || equipo.equipo_estado === "EnCola"
-                                                || equipo.equipo_estado === "EncolaC"
-                                                || equipo.equipo_estado === "At2doplano")) {
-                                                return (
-                                                         <>
-                                                             <td className="bordeIzquierdo">{equipo.id_equipo}</td>
-                                                             <td>{equipo.tipo_trabajo}</td>
-                                                             <td>{equipo.equipo_estado}</td>
-                                                             <td>{equipo.hora_llegada.toFixed(2)}</td>
-                                                             <td>{equipo.hora_Inicio_atencion.toFixed(2)}</td>
-                                                             <td>{equipo.horaFinAtencionEstimada.toFixed(2)}</td>
-                                                             <td className="bordeDerecho">{equipo.hora_salida.toFixed(2)}</td>
-                                                         </>)
-                                            } else if (
-                                                // eslint-disable-next-line no-dupe-else-if
-                                                indice > 0
-                                                && indice < filasPagina.length - 1&&
-                                                equipo !== null
-                                                && equipo.equipo_estado === "Finalizado"
-                                                && filasPagina[indice - 1].equipos[index].equipo_estado === "Atendido"
-                                            ) {
-                                                return (
-                                                    <>
-                                                        <td className="bordeIzquierdo">{equipo.id_equipo}</td>
-                                                        <td>{equipo.tipo_trabajo}</td>
-                                                        <td>{equipo.equipo_estado}</td>
-                                                        <td>{equipo.hora_llegada.toFixed(2)}</td>
-                                                        <td>{equipo.hora_Inicio_atencion.toFixed(2)}</td>
-                                                        <td>{equipo.horaFinAtencionEstimada.toFixed(2)}</td>
-                                                        <td className="bordeDerecho">{equipo.hora_salida.toFixed(2)}</td>
-                                                    </>
-                                                )
-                                            } else {
-                                                return (
-                                                    <>
-                                                        <td className="bordeIzquierdo"></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td className="bordeDerecho"></td>
-                                                    </>
-                                                )
-                                            }
-
-                                            // if(indice > 0
-                                            //     && filasPagina[indice - 1].equipos[index] !== undefined
-                                            //     && filasPagina[indice - 1].equipos[index].equipo_estado !== "Finalizado"){
-                                            //     return (
-                                            //         <>
-                                            //             <td>{equipo.id_equipo}</td>
-                                            //             <td>{equipo.tipo_trabajo}</td>
-                                            //             <td>{equipo.equipo_estado}</td>
-                                            //             <td>{equipo.hora_llegada.toFixed(2)}</td>
-                                            //             <td>{equipo.hora_Inicio_atencion.toFixed(2)}</td>
-                                            //             <td>{equipo.horaFinAtencionEstimada.toFixed(2)}</td>
-                                            //             <td>{equipo.hora_salida.toFixed(2)}</td>
-                                            //         </>
-                                            //     )
-                                            // } else if (indice === 1){
-                                            //     return (
-                                            //         <>
-                                            //             <td>{equipo.id_equipo}</td>
-                                            //             <td>{equipo.tipo_trabajo}</td>
-                                            //             <td>{equipo.equipo_estado}</td>
-                                            //             <td>{equipo.hora_llegada.toFixed(2)}</td>
-                                            //             <td>{equipo.hora_Inicio_atencion.toFixed(2)}</td>
-                                            //             <td>{equipo.horaFinAtencionEstimada.toFixed(2)}</td>
-                                            //             <td>{equipo.hora_salida.toFixed(2)}</td>
-                                            //         </>
-                                            //     )
-                                            // } else if (
-                                            //     indice > 0
-                                            //     && filasPagina[indice + 1] !== undefined
-                                            //     && filasPagina[indice + 1].equipos[index].equipo_estado === "Finalizado"
-                                            // ) {
-                                            //     return (
-                                            //         <>
-                                            //             <td></td>
-                                            //             <td></td>
-                                            //             <td></td>
-                                            //             <td></td>
-                                            //             <td></td>
-                                            //             <td></td>
-                                            //             <td></td>
-                                            //         </>
-                                            //     )
-                                            // } else if(indice === filasPagina.length - 1){
-                                            //     return (
-                                            //         <>
-                                            //             <td></td>
-                                            //             <td></td>
-                                            //             <td></td>
-                                            //             <td></td>
-                                            //             <td></td>
-                                            //             <td></td>
-                                            //             <td></td>
-                                            //         </>
-                                            //     )
-                                            // }
-
-                                        })
-                                    }
                                 </tr>
                             ))}
                             </tbody>

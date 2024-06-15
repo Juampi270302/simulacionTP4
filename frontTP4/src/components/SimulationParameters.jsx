@@ -4,7 +4,7 @@ import {ContextoSimulacion} from "../contexts/ContextoSimulacion.jsx";
 import "../styles/Estilos.css";
 import {getSimulacion} from "../scripts/HttpRequests.js"
 
-const SimulationParameters = ({setfilas}) => {
+const SimulationParameters = ({setCalculosSimulacion}) => {
 
     const {updateParams, params} = useContext(ContextoSimulacion);
     useEffect(() => {
@@ -70,7 +70,7 @@ const SimulationParameters = ({setfilas}) => {
         try {
             const response = await getSimulacion(params);
             console.log(response);
-            setfilas(response);
+            setCalculosSimulacion(response);
         } catch (error) {
             console.error(error);
         }
