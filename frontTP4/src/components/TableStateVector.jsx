@@ -109,7 +109,7 @@ const TableStateVector = ({calculosSimulacion}) => {
                                 <th scope="col" className="bordeIzquierdo bordeAbajo">Tiempo ocupacion</th>
                                 <th scope="col" className="bordeDerecho bordeAbajo">Tiempo permanencia equipos</th>
                                 {/*{*/}
-                                {/*    vectorEstados.cantidadEquipos > 0 &&*/}
+                                {/*    calculosSimulacion > 0 &&*/}
                                 {/*    vectorEstados.filas[vectorEstados.filas.length - 1].equipos.map((equipo, index) => (*/}
                                 {/*        <>*/}
                                 {/*            <th scope="col" className="bordeIzquierdo bordeArriba bordeAbajo">*/}
@@ -151,6 +151,17 @@ const TableStateVector = ({calculosSimulacion}) => {
                                     <td>{fila.servidor.horaFinOcupacion.toFixed(2)}</td>
                                     <td className="bordeIzquierdo">{fila.servidor.tiempoOcupacionAcum.toFixed(2)}</td>
                                     <td className="bordeDerecho">{fila.servidor.tiempoPermanenciaEquipoAcum.toFixed(2)}</td>
+                                    {fila.equipos.map((equipo, index) => (
+                                        <>
+                                            <td className="bordeIzquierdo">{equipo.id_equipo}</td>
+                                            <td>{equipo.equipo_estado}</td>
+                                            <td>{equipo.estado}</td>
+                                            <td>{equipo.hora_llegada.toFixed(2)}</td>
+                                            <td>{equipo.hora_Inicio_atencion.toFixed(2)}</td>
+                                            <td>{equipo.horaFinAtencionEstimada.toFixed(2)}</td>
+                                            <td>{equipo.hora_salida.toFixed(2)}</td>
+                                        </>
+                                    ))}
                                 </tr>
                             ))}
                             </tbody>
