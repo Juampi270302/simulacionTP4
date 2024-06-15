@@ -11,15 +11,18 @@ const TableStateVector = ({calculosSimulacion}) => {
         pagesArray.push(i);
     }
 
+    useEffect(() => {
+        setFilasPagina(calculosSimulacion.filasPaginadas)
+    }, [calculosSimulacion]);
+
     const getDatos = async (page) => {
         try {
             console.log(page);
             if (page !== "Seleccione fila") {
                 const response = await getDatosPaginados(page - 1);
-                setFilasPagina(response);
+                setFilasPagina(response.filas);
                 console.log(response.filas);
             }
-
         }
         catch (e)
         {console.log(e)}
@@ -47,10 +50,10 @@ const TableStateVector = ({calculosSimulacion}) => {
                 </div>
             </div>
             <div className="row mt-2">
-                <div className="col-12 container-fluid justify-content-center">
+                <div className="col-12 container-fluid justify-content-center table-responsive">
 
-                    {calculosSimulacion &&
-                        <table className="table table-hover">
+                    {filasPagina &&
+                        <table className="table table-hover" >
                             <thead>
                             <tr>
                                 <th className="bordeIzquierdo bordeArriba bordeAbajo"></th>
@@ -123,7 +126,7 @@ const TableStateVector = ({calculosSimulacion}) => {
                             </tr>
                             </thead>
                             <tbody>
-                            {filasPagina && filasPagina.filas.map((fila, indice) => (
+                            {filasPagina && filasPagina.map((fila, indice) => (
                                 <tr key={indice}>
                                     <td className="bordeIzquierdo">{fila.evento}</td>
                                     <td className="bordeIzquierdo">{fila.reloj.toFixed(2)}</td>
