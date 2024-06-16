@@ -4,9 +4,8 @@ import {getDatosPaginados} from "../scripts/HttpRequests.js";
 
 const TableStateVector = ({calculosSimulacion}) => {
     const [filasPagina, setFilasPagina] = useState([]);
-    const [equipos, setEquipos] = useState([]);
 
-    const pages = Math.ceil(calculosSimulacion.cantidadFilas / 1000);
+    const pages = Math.ceil(calculosSimulacion.cantidadFilas / 200);
     let pagesArray = ["Seleccione fila"];
     for (let i = 1; i <= pages; i++) {
         pagesArray.push(i);
@@ -14,19 +13,8 @@ const TableStateVector = ({calculosSimulacion}) => {
 
     useEffect(() => {
         setFilasPagina(calculosSimulacion.filasPaginadas)
-        generarArrayIds(calculosSimulacion.filasPaginadas)
     }, [calculosSimulacion]);
 
-    const generarArrayIds = (filas) => {
-        const equipos = [];
-        const idInicial = filas[1].equipos[0].id_equipo;
-        const idFinal = filas[filas.length - 1].equipos[
-        filas[filas.length - 1].equipos.length - 1].id_equipo
-        for (let i = idInicial; i <= idFinal; i++) {
-            equipos.push(i);
-        }
-        setEquipos(equipos);
-    }
 
     const getDatos = async (page) => {
         try {
@@ -34,7 +22,6 @@ const TableStateVector = ({calculosSimulacion}) => {
             if (page !== "Seleccione fila") {
                 const response = await getDatosPaginados(page - 1);
                 setFilasPagina(response.filas);
-                generarArrayIds(response.filas)
                 console.log(response.filas);
             }
         } catch (e) {
@@ -65,7 +52,7 @@ const TableStateVector = ({calculosSimulacion}) => {
                 </div>
             </div>
             <div className="row mt-2">
-                <div className="col-12 container-fluid justify-content-center table-responsive">
+                <div className="col-12 container-fluid justify-content-center table-responsive table-container">
 
                     {filasPagina &&
                         <table className="table table-hover">
@@ -123,19 +110,6 @@ const TableStateVector = ({calculosSimulacion}) => {
                                 <th scope="col" className="bordeAbajo">Hora fin ocupacion</th>
                                 <th scope="col" className="bordeIzquierdo bordeAbajo">Tiempo ocupacion</th>
                                 <th scope="col" className="bordeDerecho bordeAbajo">Tiempo permanencia equipos</th>
-                                {equipos && equipos.map((id) => {
-                                    return (
-                                        <>
-                                            <th className="bordeIzquierdo bordeAbajo">Equipo {id}</th>
-                                            <th className="bordeAbajo">Estado</th>
-                                            <th className="bordeAbajo">Tipo trabajo</th>
-                                            <th className="bordeAbajo">Hora llegada</th>
-                                            <th className="bordeAbajo">Hora inicio atencion</th>
-                                            <th className="bordeAbajo">Hora fin atencion estimada</th>
-                                            <th className="bordeDerecho bordeAbajo">Hora salida</th>
-                                        </>
-                                    )
-                                }}
                             </tr>
                             </thead>
                             <tbody>
