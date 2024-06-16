@@ -76,15 +76,13 @@ const TableStateVector = ({calculosSimulacion}) => {
                                 <th className="bordeArriba bordeAbajo"></th>
                                 <th className="bordeIzquierdo bordeArriba bordeAbajo"></th>
                                 <th className="bordeArriba bordeAbajo"></th>
-                                <th className="bordeIzquierdo bordeArriba bordeAbajo"></th>
                                 <th className="bordeArriba bordeAbajo">Fin trabajo</th>
                                 <th className="bordeArriba bordeAbajo"></th>
-                                <th className="bordeArriba bordeAbajo"></th>
-                                <th className="bordeIzquierdo bordeArriba bordeAbajo"></th>
-                                <th className="bordeArriba bordeAbajo">Servidor</th>
-                                <th className="bordeArriba bordeAbajo"></th>
+                                <th className="bordeIzquierdo bordeArriba bordeAbajo"> Servidor</th>
                                 <th className="bordeIzquierdo bordeArriba bordeAbajo">Acumuladores</th>
                                 <th className="bordeDerecho bordeArriba bordeAbajo"></th>
+                                <th className="bordeArriba bordeAbajo"></th>
+                                <th className="bordeArriba bordeAbajo"></th>
                             </tr>
                             <tr>
                                 <th scope="col" className="bordeIzquierdo bordeAbajo">Evento</th>
@@ -99,17 +97,15 @@ const TableStateVector = ({calculosSimulacion}) => {
                                 <th scope="col" className="bordeAbajo">Equipos en 2do plano</th>
                                 <th scope="col" className="bordeAbajo">Lugares disponibles en cola</th>
                                 <th scope="col" className="bordeAbajo">Contador de equipos</th>
-                                <th scope="col" className="bordeIzquierdo bordeAbajo">Promedio permanencia</th>
-                                <th scope="col" className="bordeAbajo">Promedio ocupacion</th>
                                 <th scope="col" className="bordeIzquierdo bordeAbajo">RND fin trabajo</th>
                                 <th scope="col" className="bordeAbajo">Tiempo medio trabajo</th>
                                 <th scope="col" className="bordeAbajo">Tiempo de trabajo</th>
                                 <th scope="col" className="bordeAbajo"> Hora fin trabajo</th>
                                 <th scope="col" className="bordeIzquierdo bordeAbajo">Estado tecnico</th>
-                                <th scope="col" className="bordeAbajo">Hora inicio ocupacion</th>
-                                <th scope="col" className="bordeAbajo">Hora fin ocupacion</th>
                                 <th scope="col" className="bordeIzquierdo bordeAbajo">Tiempo ocupacion</th>
                                 <th scope="col" className="bordeDerecho bordeAbajo">Tiempo permanencia equipos</th>
+                                <th scope="col" className="bordeIzquierdo bordeAbajo">Promedio permanencia</th>
+                                <th scope="col" className="bordeAbajo">Porcentaje ocupacion</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -127,17 +123,15 @@ const TableStateVector = ({calculosSimulacion}) => {
                                     <td>{fila.colaVector.trabajoCSegundoPlano}</td>
                                     <td>{fila.colaVector.lugaresLibres}</td>
                                     <td>{fila.contadorEquipo}</td>
-                                    <td className="bordeIzquierdo">{fila.promedioPermanencia.toFixed(2)}</td>
-                                    <td>{fila.promedioOcupacion.toFixed(2)}</td>
                                     <td className="bordeIzquierdo">{fila.finTrabajo.rndFinTrabajo.toFixed(2)}</td>
                                     <td>{fila.finTrabajo.mediaTiempoAtencion}</td>
                                     <td>{fila.finTrabajo.tiempoAtencion.toFixed(2)}</td>
                                     <td>{fila.finTrabajo.horaFinTrabajo.toFixed(2)}</td>
                                     <td className="bordeIzquierdo">{fila.servidor.estado}</td>
-                                    <td>{fila.servidor.horaInicioOcupacion.toFixed(2)}</td>
-                                    <td>{fila.servidor.horaFinOcupacion.toFixed(2)}</td>
                                     <td className="bordeIzquierdo">{fila.servidor.tiempoOcupacionAcum.toFixed(2)}</td>
                                     <td className="bordeDerecho">{fila.servidor.tiempoPermanenciaEquipoAcum.toFixed(2)}</td>
+                                    <td className="bordeIzquierdo">{fila.promedioPermanencia.toFixed(2)}</td>
+                                    <td>{fila.promedioOcupacion.toFixed(2)}</td>
                                     {fila.equipos.map((equipo, index) => {
                                         if (filasPagina[indice + 1] !== undefined &&
                                             filasPagina[indice + 1].equipos[index] !== undefined
@@ -156,14 +150,70 @@ const TableStateVector = ({calculosSimulacion}) => {
                                         }
                                         if (equipo !== null) {
                                             return (<>
-                                                <td className="bordeIzquierdo">{equipo.id_equipo}</td>
-                                                <td>{equipo.equipo_estado}</td>
-                                                <td>{equipo.tipo_trabajo}</td>
-                                                <td>{equipo.hora_llegada.toFixed(2)}</td>
-                                                <td>{equipo.hora_Inicio_atencion.toFixed(2)}</td>
-                                                <td>{equipo.horaReanudacionTrabajoC.toFixed(2)}</td>
-                                                <td>{equipo.horaFinAtencionEstimada.toFixed(2)}</td>
-                                                <td>{equipo.hora_salida.toFixed(2)}</td>
+                                                <td className="bordeIzquierdo">
+                                                    {filasPagina[indice - 1] === undefined
+                                                        ? <tr className="textoSubTitulo">Id equipo</tr>
+                                                        : filasPagina[indice - 1].equipos[index] === undefined
+                                                        ? <tr className="textoSubTitulo">Id equipo</tr>
+                                                            : null
+                                                    }
+                                                    {equipo.id_equipo}</td>
+                                                <td>
+                                                    {filasPagina[indice - 1] === undefined
+                                                        ? <tr className="textoSubTitulo">Estado</tr>
+                                                        : filasPagina[indice - 1].equipos[index] === undefined
+                                                            ? <tr className="textoSubTitulo">Estado</tr>
+                                                            : null
+                                                    }
+                                                    {equipo.equipo_estado}</td>
+                                                <td>
+                                                    {filasPagina[indice - 1] === undefined
+                                                        ? <tr className="textoSubTitulo">Tipo trabajo</tr>
+                                                        : filasPagina[indice - 1].equipos[index] === undefined
+                                                            ? <tr className="textoSubTitulo">Tipo trabajo</tr>
+                                                            : null
+                                                    }
+                                                    {equipo.tipo_trabajo}</td>
+                                                <td>
+                                                    {filasPagina[indice - 1] === undefined
+                                                        ? <tr className="textoSubTitulo">Hora llegada</tr>
+                                                        : filasPagina[indice - 1].equipos[index] === undefined
+                                                            ? <tr className="textoSubTitulo">Hora llegada</tr>
+                                                            : null
+                                                    }
+                                                    {equipo.hora_llegada.toFixed(2)}</td>
+                                                <td>
+                                                    {filasPagina[indice - 1] === undefined
+                                                        ? <tr className="textoSubTitulo">Hora cambio TC</tr>
+                                                        : filasPagina[indice - 1].equipos[index] === undefined
+                                                            ? <tr className="textoSubTitulo">Hora cambio TC</tr>
+                                                            : null
+                                                    }
+                                                    {equipo.hora_Inicio_atencion.toFixed(2)}</td>
+                                                <td>
+                                                    {filasPagina[indice - 1] === undefined
+                                                        ? <tr className="textoSubTitulo">Hora reanudacion TC</tr>
+                                                        : filasPagina[indice - 1].equipos[index] === undefined
+                                                            ? <tr className="textoSubTitulo">Hora reanudacion TC</tr>
+                                                            : null
+                                                    }
+                                                    {equipo.horaReanudacionTrabajoC.toFixed(2)}</td>
+                                                <td>
+                                                    {filasPagina[indice - 1] === undefined
+                                                        ? <tr className="textoSubTitulo">Fin at estimada</tr>
+                                                        : filasPagina[indice - 1].equipos[index] === undefined
+                                                            ? <tr className="textoSubTitulo">Fin at estimada</tr>
+                                                            : null
+                                                    }
+                                                    {equipo.horaFinAtencionEstimada.toFixed(2)}</td>
+                                                <td>
+                                                    {filasPagina[indice - 1] === undefined
+                                                        ? <tr className="textoSubTitulo">Hora salida</tr>
+                                                        : filasPagina[indice - 1].equipos[index] === undefined
+                                                            ? <tr className="textoSubTitulo">Hora salida</tr>
+                                                            : null
+                                                    }
+                                                    {equipo.hora_salida.toFixed(2)}</td>
                                             </>)
                                         } else {
                                             return (
