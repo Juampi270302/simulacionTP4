@@ -4,6 +4,7 @@ import {getDatosPaginados} from "../scripts/HttpRequests.js";
 
 const TableStateVector = ({calculosSimulacion}) => {
     const [filasPagina, setFilasPagina] = useState([]);
+    const [equipos, setEquipos] = useState([]);
 
     const pages = Math.ceil(calculosSimulacion.cantidadFilas / 1000);
     let pagesArray = ["Seleccione fila"];
@@ -13,7 +14,19 @@ const TableStateVector = ({calculosSimulacion}) => {
 
     useEffect(() => {
         setFilasPagina(calculosSimulacion.filasPaginadas)
+        generarArrayIds(calculosSimulacion.filasPaginadas)
     }, [calculosSimulacion]);
+
+    const generarArrayIds = (filas) => {
+        const equipos = [];
+        const idInicial = filas[1].equipos[0].id_equipo;
+        const idFinal = filas[filas.length - 1].equipos[
+        filas[filas.length - 1].equipos.length - 1].id_equipo
+        for (let i = idInicial; i <= idFinal; i++) {
+            equipos.push(i);
+        }
+        setEquipos(equipos);
+    }
 
     const getDatos = async (page) => {
         try {
@@ -21,11 +34,12 @@ const TableStateVector = ({calculosSimulacion}) => {
             if (page !== "Seleccione fila") {
                 const response = await getDatosPaginados(page - 1);
                 setFilasPagina(response.filas);
+                generarArrayIds(response.filas)
                 console.log(response.filas);
             }
+        } catch (e) {
+            console.log(e)
         }
-        catch (e)
-        {console.log(e)}
     }
 
     return (
@@ -46,14 +60,15 @@ const TableStateVector = ({calculosSimulacion}) => {
                 </div>
                 <div className="col-4 d-flex justify-content-center flex-column text-center">
                     <label className="textoTitulo">Porcentaje ocupacion</label>
-                    <label className="textoSubTitulo">{calculosSimulacion.porcentajeOcupacionServidor.toFixed(2)}</label>
+                    <label
+                        className="textoSubTitulo">{calculosSimulacion.porcentajeOcupacionServidor.toFixed(2)}</label>
                 </div>
             </div>
             <div className="row mt-2">
                 <div className="col-12 container-fluid justify-content-center table-responsive">
 
                     {filasPagina &&
-                        <table className="table table-hover" >
+                        <table className="table table-hover">
                             <thead>
                             <tr>
                                 <th className="bordeIzquierdo bordeArriba bordeAbajo"></th>
@@ -108,21 +123,19 @@ const TableStateVector = ({calculosSimulacion}) => {
                                 <th scope="col" className="bordeAbajo">Hora fin ocupacion</th>
                                 <th scope="col" className="bordeIzquierdo bordeAbajo">Tiempo ocupacion</th>
                                 <th scope="col" className="bordeDerecho bordeAbajo">Tiempo permanencia equipos</th>
-                                {/*{*/}
-                                {/*    calculosSimulacion > 0 &&*/}
-                                {/*    vectorEstados.filas[vectorEstados.filas.length - 1].equipos.map((equipo, index) => (*/}
-                                {/*        <>*/}
-                                {/*            <th scope="col" className="bordeIzquierdo bordeArriba bordeAbajo">*/}
-                                {/*                Id equipo</th>*/}
-                                {/*            <th scope="col" className="bordeAbajo bordeArriba">Tipo trabajo</th>*/}
-                                {/*            <th scope="col" className="bordeAbajo bordeArriba">Estado</th>*/}
-                                {/*            <th scope="col" className="bordeAbajo bordeArriba">Hora llegada</th>*/}
-                                {/*            <th scope="col" className="bordeAbajo bordeArriba">Hora inicio atencion</th>*/}
-                                {/*            <th scope="col" className="bordeAbajo bordeArriba">Hora fin atencion estimada</th>*/}
-                                {/*            <th scope="col" className="bordeAbajo bordeArriba">Hora salida</th>*/}
-                                {/*        </>*/}
-                                {/*    ))*/}
-                                {/*}*/}
+                                {equipos && equipos.map((id) => {
+                                    return (
+                                        <>
+                                            <th className="bordeIzquierdo bordeAbajo">Equipo {id}</th>
+                                            <th className="bordeAbajo">Estado</th>
+                                            <th className="bordeAbajo">Tipo trabajo</th>
+                                            <th className="bordeAbajo">Hora llegada</th>
+                                            <th className="bordeAbajo">Hora inicio atencion</th>
+                                            <th className="bordeAbajo">Hora fin atencion estimada</th>
+                                            <th className="bordeDerecho bordeAbajo">Hora salida</th>
+                                        </>
+                                    )
+                                }}
                             </tr>
                             </thead>
                             <tbody>
@@ -151,17 +164,47 @@ const TableStateVector = ({calculosSimulacion}) => {
                                     <td>{fila.servidor.horaFinOcupacion.toFixed(2)}</td>
                                     <td className="bordeIzquierdo">{fila.servidor.tiempoOcupacionAcum.toFixed(2)}</td>
                                     <td className="bordeDerecho">{fila.servidor.tiempoPermanenciaEquipoAcum.toFixed(2)}</td>
-                                    {fila.equipos.map((equipo, index) => (
-                                        <>
-                                            <td className="bordeIzquierdo">{equipo.id_equipo}</td>
-                                            <td>{equipo.equipo_estado}</td>
-                                            <td>{equipo.estado}</td>
-                                            <td>{equipo.hora_llegada.toFixed(2)}</td>
-                                            <td>{equipo.hora_Inicio_atencion.toFixed(2)}</td>
-                                            <td>{equipo.horaFinAtencionEstimada.toFixed(2)}</td>
-                                            <td>{equipo.hora_salida.toFixed(2)}</td>
-                                        </>
-                                    ))}
+                                    {fila.equipos.map((equipo, index) => {
+                                        if (filasPagina[indice + 1] !== undefined &&
+                                            filasPagina[indice + 1].equipos[index] !== undefined
+                                            && filasPagina[indice + 1].equipos[index] !== null
+                                            && filasPagina[indice + 1].equipos[index].id_equipo !== null
+                                            && equipo !== null
+
+                                        ) {
+                                            if (filasPagina[indice + 1].equipos[index].id_equipo !== equipo.id_equipo) {
+                                                filasPagina[indice + 1].equipos.splice(index, 0, null)
+                                            }
+                                        }
+                                        if (filasPagina[indice + 1] !== undefined &&
+                                            equipo === null && filasPagina[indice + 1].equipos[index] !== null) {
+                                            filasPagina[indice + 1].equipos.splice(index, 0, null)
+                                        }
+                                        if (equipo !== null) {
+                                            return (<>
+                                                <td className="bordeIzquierdo">{equipo.id_equipo}</td>
+                                                <td>{equipo.equipo_estado}</td>
+                                                <td>{equipo.estado}</td>
+                                                <td>{equipo.hora_llegada.toFixed(2)}</td>
+                                                <td>{equipo.hora_Inicio_atencion.toFixed(2)}</td>
+                                                <td>{equipo.horaFinAtencionEstimada.toFixed(2)}</td>
+                                                <td>{equipo.hora_salida.toFixed(2)}</td>
+                                            </>)
+                                        } else {
+                                            return (
+                                                <>
+                                                    <td className="bordeIzquierdo"></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <th></th>
+                                                </>
+
+                                            )
+                                        }
+                                    })}
                                 </tr>
                             ))}
                             </tbody>
