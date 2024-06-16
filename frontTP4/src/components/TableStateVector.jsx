@@ -99,8 +99,8 @@ const TableStateVector = ({calculosSimulacion}) => {
                                 <th scope="col" className="bordeAbajo">Equipos en 2do plano</th>
                                 <th scope="col" className="bordeAbajo">Lugares disponibles en cola</th>
                                 <th scope="col" className="bordeAbajo">Contador de equipos</th>
-                                <th scope="col" className="bordeIzquierdo bordeAbajo">Hora cambio trabajo</th>
-                                <th scope="col" className="bordeAbajo">Hora reanudacion trabajo</th>
+                                <th scope="col" className="bordeIzquierdo bordeAbajo">Promedio permanencia</th>
+                                <th scope="col" className="bordeAbajo">Promedio ocupacion</th>
                                 <th scope="col" className="bordeIzquierdo bordeAbajo">RND fin trabajo</th>
                                 <th scope="col" className="bordeAbajo">Tiempo medio trabajo</th>
                                 <th scope="col" className="bordeAbajo">Tiempo de trabajo</th>
@@ -127,8 +127,8 @@ const TableStateVector = ({calculosSimulacion}) => {
                                     <td>{fila.colaVector.trabajoCSegundoPlano}</td>
                                     <td>{fila.colaVector.lugaresLibres}</td>
                                     <td>{fila.contadorEquipo}</td>
-                                    <td className="bordeIzquierdo">{fila.horaCambioTrabajoC.toFixed(2)}</td>
-                                    <td>{fila.horaReanudacionTrabajoC.toFixed(2)}</td>
+                                    <td className="bordeIzquierdo">{fila.promedioPermanencia.toFixed(2)}</td>
+                                    <td>{fila.promedioOcupacion.toFixed(2)}</td>
                                     <td className="bordeIzquierdo">{fila.finTrabajo.rndFinTrabajo.toFixed(2)}</td>
                                     <td>{fila.finTrabajo.mediaTiempoAtencion}</td>
                                     <td>{fila.finTrabajo.tiempoAtencion.toFixed(2)}</td>
@@ -158,9 +158,10 @@ const TableStateVector = ({calculosSimulacion}) => {
                                             return (<>
                                                 <td className="bordeIzquierdo">{equipo.id_equipo}</td>
                                                 <td>{equipo.equipo_estado}</td>
-                                                <td>{equipo.estado}</td>
+                                                <td>{equipo.tipo_trabajo}</td>
                                                 <td>{equipo.hora_llegada.toFixed(2)}</td>
                                                 <td>{equipo.hora_Inicio_atencion.toFixed(2)}</td>
+                                                <td>{equipo.horaReanudacionTrabajoC.toFixed(2)}</td>
                                                 <td>{equipo.horaFinAtencionEstimada.toFixed(2)}</td>
                                                 <td>{equipo.hora_salida.toFixed(2)}</td>
                                             </>)
@@ -168,6 +169,7 @@ const TableStateVector = ({calculosSimulacion}) => {
                                             return (
                                                 <>
                                                     <td className="bordeIzquierdo"></td>
+                                                    <td></td>
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
