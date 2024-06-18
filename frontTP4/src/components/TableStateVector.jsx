@@ -113,20 +113,42 @@ const TableStateVector = ({calculosSimulacion}) => {
                                 <tr key={indice}>
                                     <td className="bordeIzquierdo">{fila.evento}</td>
                                     <td className="bordeIzquierdo">{fila.reloj.toFixed(2)}</td>
-                                    <td className="bordeIzquierdo">{fila.llegada.rndLlegada.toFixed(2)}</td>
-                                    <td>{fila.llegada.tiempoEntreLlegada.toFixed(2)}</td>
+                                    <td className="bordeIzquierdo">{
+                                        fila.llegada.rndLlegada !== null
+                                            ? fila.llegada.rndLlegada.toFixed(2)
+                                            : null}
+                                    </td>
+                                    <td>{fila.llegada.tiempoEntreLlegada !== null
+                                        ? fila.llegada.tiempoEntreLlegada.toFixed(2)
+                                        : null}
+                                    </td>
                                     <td>{fila.llegada.horaProximaLlegada.toFixed(2)}</td>
-                                    <td>{fila.llegada.rndTipoTrabajo.toFixed(2)}</td>
+                                    <td>{fila.llegada.rndTipoTrabajo !== null ?
+                                        fila.llegada.rndTipoTrabajo.toFixed(2)
+                                        : null}</td>
                                     <td>{fila.llegada.trabajo}</td>
                                     <td className="bordeIzquierdo">{fila.colaVector.colaComun}</td>
                                     <td>{fila.colaVector.colaTrabajoC}</td>
                                     <td>{fila.colaVector.trabajoCSegundoPlano}</td>
                                     <td>{fila.colaVector.lugaresLibres}</td>
                                     <td>{fila.contadorEquipo}</td>
-                                    <td className="bordeIzquierdo">{fila.finTrabajo.rndFinTrabajo.toFixed(2)}</td>
-                                    <td>{fila.finTrabajo.mediaTiempoAtencion}</td>
-                                    <td>{fila.finTrabajo.tiempoAtencion.toFixed(2)}</td>
-                                    <td>{fila.finTrabajo.horaFinTrabajo.toFixed(2)}</td>
+                                    <td className="bordeIzquierdo">{fila.finTrabajo.rndFinTrabajo !== null
+                                        ? fila.finTrabajo.rndFinTrabajo.toFixed(2)
+                                        : null}
+                                    </td>
+                                    <td>{fila.finTrabajo.mediaTiempoAtencion !== null
+                                        ? fila.finTrabajo.mediaTiempoAtencion
+                                        : null}
+                                    </td>
+                                    <td>{fila.finTrabajo.tiempoAtencion !== null
+                                        ? fila.finTrabajo.tiempoAtencion.toFixed(2)
+                                        : null
+                                    }
+                                    </td>
+                                    <td>{fila.finTrabajo.horaFinTrabajo !== null
+                                        ? fila.finTrabajo.horaFinTrabajo.toFixed(2)
+                                        : null
+                                    }</td>
                                     <td className="bordeIzquierdo">{fila.servidor.estado}</td>
                                     <td className="bordeIzquierdo">{fila.servidor.tiempoOcupacionAcum.toFixed(2)}</td>
                                     <td className="bordeDerecho">{fila.servidor.tiempoPermanenciaEquipoAcum.toFixed(2)}</td>
@@ -154,7 +176,7 @@ const TableStateVector = ({calculosSimulacion}) => {
                                                     {filasPagina[indice - 1] === undefined
                                                         ? <tr className="textoSubTitulo">Id equipo</tr>
                                                         : filasPagina[indice - 1].equipos[index] === undefined
-                                                        ? <tr className="textoSubTitulo">Id equipo</tr>
+                                                            ? <tr className="textoSubTitulo">Id equipo</tr>
                                                             : null
                                                     }
                                                     {equipo.id_equipo}</td>
@@ -189,7 +211,10 @@ const TableStateVector = ({calculosSimulacion}) => {
                                                             ? <tr className="textoSubTitulo">Hora cambio TC</tr>
                                                             : null
                                                     }
-                                                    {equipo.hora_Inicio_atencion.toFixed(2)}</td>
+                                                    {equipo.horaCambioTrabajoC !== null
+                                                        ? equipo.horaCambioTrabajoC.toFixed(2)
+                                                        : null}
+                                                </td>
                                                 <td>
                                                     {filasPagina[indice - 1] === undefined
                                                         ? <tr className="textoSubTitulo">Hora reanudacion TC</tr>
@@ -197,7 +222,10 @@ const TableStateVector = ({calculosSimulacion}) => {
                                                             ? <tr className="textoSubTitulo">Hora reanudacion TC</tr>
                                                             : null
                                                     }
-                                                    {equipo.horaReanudacionTrabajoC.toFixed(2)}</td>
+                                                    {equipo.horaReanudacionTrabajoC !== null
+                                                        ? equipo.horaReanudacionTrabajoC.toFixed(2)
+                                                        : null}
+                                                </td>
                                                 <td>
                                                     {filasPagina[indice - 1] === undefined
                                                         ? <tr className="textoSubTitulo">Fin at estimada</tr>
@@ -205,7 +233,10 @@ const TableStateVector = ({calculosSimulacion}) => {
                                                             ? <tr className="textoSubTitulo">Fin at estimada</tr>
                                                             : null
                                                     }
-                                                    {equipo.horaFinAtencionEstimada.toFixed(2)}</td>
+                                                    {equipo.horaFinAtencionEstimada !== null
+                                                        ? equipo.horaFinAtencionEstimada.toFixed(2)
+                                                        : null}
+                                                </td>
                                                 <td>
                                                     {filasPagina[indice - 1] === undefined
                                                         ? <tr className="textoSubTitulo">Hora salida</tr>
@@ -213,7 +244,10 @@ const TableStateVector = ({calculosSimulacion}) => {
                                                             ? <tr className="textoSubTitulo">Hora salida</tr>
                                                             : null
                                                     }
-                                                    {equipo.hora_salida.toFixed(2)}</td>
+                                                    {equipo.hora_salida !== null
+                                                        ? equipo.hora_salida.toFixed(2)
+                                                        : null}
+                                                </td>
                                             </>)
                                         } else {
                                             return (
