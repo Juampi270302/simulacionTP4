@@ -22,4 +22,3 @@ export const getDatosPaginados = async (page) => {
         throw error;
     }
 }
-

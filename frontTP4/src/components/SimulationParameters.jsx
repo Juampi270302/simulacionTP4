@@ -4,7 +4,7 @@ import {ContextoSimulacion} from "../contexts/ContextoSimulacion.jsx";
 import "../styles/Estilos.css";
 import {getSimulacion} from "../scripts/HttpRequests.js"
 
-const SimulationParameters = ({setCalculosSimulacion}) => {
+const SimulationParameters = ({setCalculosSimulacion, setParams}) => {
 
     const {updateParams, params} = useContext(ContextoSimulacion);
     useEffect(() => {
@@ -16,11 +16,15 @@ const SimulationParameters = ({setCalculosSimulacion}) => {
     useEffect(() => {
         validateTimeFinTC();
     }, [params.timeEndTC, params.timeTC, params.timeMin, params.timeInitTC])
+    useEffect(() => {
+        validateLimInfLimSupRK();
+    }, [params.limInfUnifTC, params.limSupUnifTC])
 
     const initialState = {
         probMasUno: false,
         minInitFinTC: false,
         horaInicioMax: false,
+        minLimInfLimSupRK: false,
         probActual: 0
     };
 
@@ -34,6 +38,8 @@ const SimulationParameters = ({setCalculosSimulacion}) => {
                 return {...errors, horaInicioMax: action.value};
             case "probActual":
                 return {...errors, probActual: action.value};
+            case "minLimInfLimSupRK":
+                return {...errors, minLimInfLimSupRK: action.value};
             default:
                 throw new Error();
         }
@@ -66,8 +72,17 @@ const SimulationParameters = ({setCalculosSimulacion}) => {
             setErrors({type: 'minInitFinTC', value: false});
         }
     }
+
+    const validateLimInfLimSupRK = () => {
+        if (params.limInfUnifTC >= params.limSupUnifTC) {
+            setErrors({type:'minLimInfLimSupRK', value: true});
+        } else {
+            setErrors({type:'minLimInfLimSupRK', value: false});
+        }
+    }
     const sendData = async () => {
         try {
+            setParams(params)
             const response = await getSimulacion(params);
             console.log(response);
             setCalculosSimulacion(response);
@@ -158,7 +173,7 @@ const SimulationParameters = ({setCalculosSimulacion}) => {
                                 <label className="textoSubTitulo">Limite inferior Uniforme C</label>
                                 <input type="number"
                                        className="form-control textoBasico"
-                                       defaultValue={15}
+                                       defaultValue={20}
                                        min={0}
                                        step={0.01}
                                        value={params.limInfUnifTC}
@@ -180,7 +195,7 @@ const SimulationParameters = ({setCalculosSimulacion}) => {
                                 <label className="textoSubTitulo">Limite Superior Uniforme C</label>
                                 <input type="number"
                                        className="form-control textoBasico"
-                                       defaultValue={15}
+                                       defaultValue={100}
                                        min={0}
                                        step={0.01}
                                        value={params.limSupUnifTC}

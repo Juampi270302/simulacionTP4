@@ -1,13 +1,10 @@
 import React, { useState } from 'react'
 
-const RKTable = ({ calculosSimulacion }) => {
-
+const RKTable = ({ calculosSimulacion, params }) => {
     const equipos = calculosSimulacion.datosEquiposRK
-    const nSuma = calculosSimulacion.nsuma
-    const nExpo = calculosSimulacion.nexpo
-
 
     const [equipoSeleccionado, setEquipoSeleccionado] = useState(equipos[0]);
+    
 
     const e = Math.E
     const h = 0.1
@@ -16,6 +13,8 @@ const RKTable = ({ calculosSimulacion }) => {
         const rows = [];
         let t = 0;
         let C = 0;
+        const nExpo = params.nExpo
+        const nSuma = params.nSuma
         const CIsZero = equipoSeleccionado.valorC === 0;
 
         while (C <= equipoSeleccionado.valorC) {
@@ -83,7 +82,7 @@ const RKTable = ({ calculosSimulacion }) => {
                     </tr>
                     <tr>
                         <th>Ecuación</th>
-                        <th>dC/dt = 0,1 + e^(0,09*C)</th>
+                        <th>dC/dt = {params.nSuma} + e^({params.nExpo}*C)</th>
                     </tr>
 
                 </thead>
