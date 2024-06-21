@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 
-const RKTable = ({ calculosSimulacion }) => {
+const RKTable = ({ calculosSimulacion, params }) => {
     const equipos = calculosSimulacion.datosEquiposRK
 
     const [equipoSeleccionado, setEquipoSeleccionado] = useState(equipos[0]);
+    
 
     const e = Math.E
     const h = 0.1
@@ -12,17 +13,19 @@ const RKTable = ({ calculosSimulacion }) => {
         const rows = [];
         let t = 0;
         let C = 0;
+        const nExpo = params.nExpo
+        const nSuma = params.nSuma
         const CIsZero = equipoSeleccionado.valorC === 0;
 
         while (C <= equipoSeleccionado.valorC) {
 
-            const k1 = h * (0.1 + Math.pow(e, 0.09 * C));
+            const k1 = h * (nSuma + Math.pow(e, nExpo * C));
             const auxk1 = C + k1 / 2
-            const k2 = h * (0.1 + Math.pow(e, 0.09 * auxk1));
+            const k2 = h * (nSuma + Math.pow(e, nExpo * auxk1));
             const auxk2 = C + k2 / 2
-            const k3 = h * (0.1 + Math.pow(e, 0.09 * auxk2));
+            const k3 = h * (nSuma + Math.pow(e, nExpo * auxk2));
             const auxk3 = C + k3
-            const k4 = h * (0.1 + Math.pow(e, 0.09 * auxk3));
+            const k4 = h * (nSuma + Math.pow(e, nExpo * auxk3));
             const Cn = C + (k1 + 2 * k2 + 2 * k3 + k4) / 6;
 
             rows.push({ t, C, k1, auxk1, k2, auxk2, k3, auxk3, k4, Cn });
@@ -32,13 +35,13 @@ const RKTable = ({ calculosSimulacion }) => {
         }
 
         if (!CIsZero) {
-            const k1 = h * (0.1 + Math.pow(e, 0.09 * C));
+            const k1 = h * (nSuma + Math.pow(e, nExpo * C));
             const auxk1 = C + k1 / 2
-            const k2 = h * (0.1 + Math.pow(e, 0.09 * auxk1));
+            const k2 = h * (nSuma + Math.pow(e, nExpo * auxk1));
             const auxk2 = C + k2 / 2
-            const k3 = h * (0.1 + Math.pow(e, 0.09 * auxk2));
+            const k3 = h * (nSuma + Math.pow(e, nExpo * auxk2));
             const auxk3 = C + k3
-            const k4 = h * (0.1 + Math.pow(e, 0.09 * auxk3));
+            const k4 = h * (nSuma + Math.pow(e, nExpo * auxk3));
             const Cn = C + (k1 + 2 * k2 + 2 * k3 + k4) / 6;
 
             rows.push({ t, C, k1, auxk1, k2, auxk2, k3, auxk3, k4, Cn });
@@ -79,7 +82,7 @@ const RKTable = ({ calculosSimulacion }) => {
                     </tr>
                     <tr>
                         <th>Ecuación</th>
-                        <th>dC/dt = 0,1 + e^(0,09*C)</th>
+                        <th>dC/dt = {params.nSuma} + e^({params.nExpo}*C)</th>
                     </tr>
 
                 </thead>
