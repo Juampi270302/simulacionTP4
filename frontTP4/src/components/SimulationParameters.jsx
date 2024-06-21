@@ -59,8 +59,8 @@ const SimulationParameters = ({setCalculosSimulacion}) => {
         }
     }
 
-    const validateTimeFinTC = () =>{
-        if(params.timeInitTC + params.timeEndTC >= (params.timeTC * 60)- params.timeMin){
+    const validateTimeFinTC = () => {
+        if (params.timeInitTC + params.timeEndTC >= (params.timeTC * 60) - params.timeMin) {
             setErrors({type: 'minInitFinTC', value: true});
         } else {
             setErrors({type: 'minInitFinTC', value: false});
@@ -146,50 +146,115 @@ const SimulationParameters = ({setCalculosSimulacion}) => {
                         </div>
                     </div>
                 </div>
-                <div className="col-6 d-flex flex-column">
-                    <div className="card">
-                        <div className="card-body">
-                            <div className="row d-flex justify-content-center textoTitulo">
-                                Parametros trabajos C
-                            </div>
-                            <div className="row d-flex justify-content-center">
-                                <div className="col-6 d-flex flex-column text-center">
-                                    <label className="textoSubTitulo">Minutos despues de inicio</label>
-                                    <input type="number"
-                                           className="form-control textoBasico"
-                                           defaultValue={15}
-                                           min={0}
-                                           step={0.01}
-                                           value={params.timeInitTC}
-                                           onChange={() => {
-                                               if (event.target.value > 0) {
-                                                   console.log(errors.minInitTC)
-                                                   updateParams({
-                                                       type: 'setTimeInitTC',
-                                                       value: parseFloat(event.target.value)
-                                                   })
-                                               } else {
-                                                   updateParams({
-                                                       type: 'setTimeInitTC',
-                                                       value: parseFloat(0)
-                                                   })
-                                               }
-                                           }}/>
-                                </div>
-                                <div className="col-6 d-flex flex-column text-center">
-                                    <label className="textoSubTitulo">Minutos antes del final</label>
-                                    <input type="number" className="form-control textoBasico" defaultValue={15} min={1}
-                                           onChange={() => {
+            </div>
+            <div className="row d-flex justify-content-center mt-2">
+                <div className="card">
+                    <div className="card-body">
+                        <div className="row d-flex justify-content-center textoTitulo">
+                            Parametros trabajos C
+                        </div>
+                        <div className="row d-flex justify-content-center">
+                            <div className="col-2 d-flex flex-column text-center">
+                                <label className="textoSubTitulo">Limite inferior Uniforme C</label>
+                                <input type="number"
+                                       className="form-control textoBasico"
+                                       defaultValue={15}
+                                       min={0}
+                                       step={0.01}
+                                       value={params.limInfUnifTC}
+                                       onChange={() => {
+                                           if (event.target.value > 0) {
                                                updateParams({
-                                                   type: 'setTimeEndTC',
+                                                   type: 'setLimInfUnifTC',
                                                    value: parseFloat(event.target.value)
                                                })
-                                           }}/>
-                                </div>
+                                           } else {
+                                               updateParams({
+                                                   type: 'setLimInfUnifTC',
+                                                   value: parseFloat(0)
+                                               })
+                                           }
+                                       }}/>
                             </div>
-                            {errors.minInitFinTC &&
-                            <span className="errores">Error, la suma de los minutos despues de inicio y antes de final debe ser menor a el minimo de tiempo C</span>}
+                            <div className="col-2 d-flex flex-column text-center">
+                                <label className="textoSubTitulo">Limite Superior Uniforme C</label>
+                                <input type="number"
+                                       className="form-control textoBasico"
+                                       defaultValue={15}
+                                       min={0}
+                                       step={0.01}
+                                       value={params.limSupUnifTC}
+                                       onChange={() => {
+                                           if (event.target.value > 0) {
+                                               updateParams({
+                                                   type: 'setLimSupUnifTC',
+                                                   value: parseFloat(event.target.value)
+                                               })
+                                           } else {
+                                               updateParams({
+                                                   type: 'setLimSupUnifTC',
+                                                   value: parseFloat(0)
+                                               })
+                                           }
+                                       }}/>
+                            </div>
+                            <div className="col-2 d-flex flex-column text-center">
+                                <label className="textoSubTitulo">Numero Ecuacion Suma</label>
+                                <input type="number"
+                                       className="form-control textoBasico"
+                                       defaultValue={0.1}
+                                       min={0}
+                                       step={0.01}
+                                       value={params.nSuma}
+                                       onChange={() => {
+                                           if (event.target.value > 0) {
+                                               updateParams({
+                                                   type: 'setNSuma',
+                                                   value: parseFloat(event.target.value)
+                                               })
+                                           } else {
+                                               updateParams({
+                                                   type: 'setNSuma',
+                                                   value: parseFloat(0)
+                                               })
+                                           }
+                                       }}/>
+                            </div>
+                            <div className="col-2 d-flex flex-column text-center">
+                                <label className="textoSubTitulo">Numero Ecuacion Exponente</label>
+                                <input type="number"
+                                       className="form-control textoBasico "
+                                       defaultValue={0.09}
+                                       min={0}
+                                       step={0.01}
+                                       value={params.nExpo}
+                                       onChange={() => {
+                                           if (event.target.value > 0) {
+                                               updateParams({
+                                                   type: 'setNExpo',
+                                                   value: parseFloat(event.target.value)
+                                               })
+                                           } else {
+                                               updateParams({
+                                                   type: 'setNExpo',
+                                                   value: parseFloat(0)
+                                               })
+                                           }
+                                       }}/>
+                            </div>
+                            <div className="col-2 d-flex flex-column text-center">
+                                <label className="textoSubTitulo">Minutos antes del final</label>
+                                <input type="number" className="form-control textoBasico" defaultValue={15} min={1}
+                                       onChange={() => {
+                                           updateParams({
+                                               type: 'setTimeEndTC',
+                                               value: parseFloat(event.target.value)
+                                           })
+                                       }}/>
+                            </div>
                         </div>
+                        {errors.minInitFinTC &&
+                            <span className="errores">Error, la suma de los minutos despues de inicio y antes de final debe ser menor a el minimo de tiempo C</span>}
                     </div>
                 </div>
             </div>
