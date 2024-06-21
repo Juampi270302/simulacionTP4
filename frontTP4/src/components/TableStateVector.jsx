@@ -212,7 +212,8 @@ const TableStateVector = ({calculosSimulacion}) => {
                                                             ? <tr className="textoSubTitulo">Id equipo</tr>
                                                             : null
                                                     }
-                                                    {equipo.id_equipo}</td>
+                                                    {equipo.id_equipo}
+                                                </td>
                                                 <td>
                                                     {filasPagina[indice - 1] === undefined
                                                         ? <tr className="textoSubTitulo">Estado</tr>
@@ -220,7 +221,8 @@ const TableStateVector = ({calculosSimulacion}) => {
                                                             ? <tr className="textoSubTitulo">Estado</tr>
                                                             : null
                                                     }
-                                                    {equipo.equipo_estado}</td>
+                                                    {equipo.equipo_estado}
+                                                </td>
                                                 <td>
                                                     {filasPagina[indice - 1] === undefined
                                                         ? <tr className="textoSubTitulo">Tipo trabajo</tr>
@@ -228,7 +230,8 @@ const TableStateVector = ({calculosSimulacion}) => {
                                                             ? <tr className="textoSubTitulo">Tipo trabajo</tr>
                                                             : null
                                                     }
-                                                    {equipo.tipo_trabajo}</td>
+                                                    {equipo.tipo_trabajo}
+                                                </td>
                                                 <td>
                                                     {filasPagina[indice - 1] === undefined
                                                         ? <tr className="textoSubTitulo">Hora llegada</tr>
@@ -236,7 +239,21 @@ const TableStateVector = ({calculosSimulacion}) => {
                                                             ? <tr className="textoSubTitulo">Hora llegada</tr>
                                                             : null
                                                     }
-                                                    {equipo.hora_llegada.toFixed(2)}</td>
+                                                    {equipo.hora_llegada.toFixed(2)}
+                                                </td>
+                                                <td>
+                                                    {filasPagina[indice - 1] === undefined
+                                                        ? <tr className="textoSubTitulo">Valor N (Min/Hs)</tr>
+                                                        : filasPagina[indice - 1].equipos[index] === undefined
+                                                            ? <tr className="textoSubTitulo">Valor N (Min/Hs)</tr>
+                                                            : null
+                                                    }
+                                                    {equipo.valorN !== null
+                                                        ? equipo.valorN.toFixed(2)
+                                                             + `/` +
+                                                        (equipo.valorN/60).toFixed(2)
+                                                        : null}
+                                                </td>
                                                 <td>
                                                     {filasPagina[indice - 1] === undefined
                                                         ? <tr className="textoSubTitulo">Hora cambio TC</tr>
@@ -292,7 +309,8 @@ const TableStateVector = ({calculosSimulacion}) => {
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
-                                                    <th></th>
+                                                    <td></td>
+                                                    <td></td>
                                                 </>
 
                                             )
