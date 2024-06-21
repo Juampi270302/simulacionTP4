@@ -47,7 +47,7 @@ function reducer(params, action) {
             return {...params, timeMax: action.value};
         case 'setLimInfUnifTC':
             return {...params, limInfUnifTC: action.value};
-        case 'setLlimSupUnifTC':
+        case 'setLimSupUnifTC':
             return {...params, limSupUnifTC: action.value};
         case 'setNSuma':
             return {...params, nSuma: action.value};
