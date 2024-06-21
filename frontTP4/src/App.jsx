@@ -8,6 +8,8 @@ import RKTable from "./components/RKTable.jsx";
 function App() {
     const [calculosSimulacion, setcalculosSimulacion] = useState(null);
     const [showStateTable, setShowStateTable] = useState(true);
+    const [params, setParams] = useState(null);
+
     return (
         <ContextoSimulacionHandler>
             <div className="container-fluid body">
@@ -18,7 +20,7 @@ function App() {
                 </div>
                 <div className="row d-flex justify-content-center body">
                     <div className="col-6 ">
-                        <SimulationParameters setCalculosSimulacion={setcalculosSimulacion}></SimulationParameters>
+                        <SimulationParameters setCalculosSimulacion={setcalculosSimulacion} setParams={setParams}></SimulationParameters>
                     </div>
                 </div>
                 
@@ -32,7 +34,7 @@ function App() {
                 </div>
                 <div className={`row d-flex justify-content-center body mt-4 ${showStateTable ? 'd-none' : ''}`}>
                     <div className="col-12">
-                        {calculosSimulacion && <RKTable calculosSimulacion={calculosSimulacion} />}
+                        {calculosSimulacion && <RKTable calculosSimulacion={calculosSimulacion} params={params} />}
                     </div>
                 </div>
             </div>
