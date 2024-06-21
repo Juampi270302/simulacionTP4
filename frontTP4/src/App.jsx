@@ -1,12 +1,13 @@
-import {ContextoSimulacion, ContextoSimulacionHandler} from "./contexts/ContextoSimulacion.jsx";
-import TableTimeProb from "./components/TableTimeProb.jsx";
+import { ContextoSimulacionHandler } from "./contexts/ContextoSimulacion.jsx";
 import TableStateVector from "./components/TableStateVector.jsx";
 import Header from "./components/Header.jsx";
 import SimulationParameters from "./components/SimulationParameters.jsx";
-import {useContext, useState} from "react";
+import { useState } from "react";
+import RKTable from "./components/RKTable.jsx";
 
 function App() {
     const [calculosSimulacion, setcalculosSimulacion] = useState(null);
+    const [showStateTable, setShowStateTable] = useState(true);
     return (
         <ContextoSimulacionHandler>
             <div className="container-fluid body">
@@ -20,9 +21,18 @@ function App() {
                         <SimulationParameters setCalculosSimulacion={setcalculosSimulacion}></SimulationParameters>
                     </div>
                 </div>
-                <div className="row d-flex justify-content-center body mt-4">
-                    <div className="col-12 ">
-                        {calculosSimulacion && <TableStateVector calculosSimulacion={calculosSimulacion}></TableStateVector>}
+                
+                <button onClick={() => setShowStateTable(true)} className="btn btn-secondary">Tabla de estados</button>
+                <button onClick={() => setShowStateTable(false)} className="btn btn-secondary">Tabla de RK</button>
+
+                <div className={`row d-flex justify-content-center body mt-4 ${showStateTable ? '' : 'd-none'}`}>
+                    <div className="col-12">
+                        {calculosSimulacion && <TableStateVector calculosSimulacion={calculosSimulacion} />}
+                    </div>
+                </div>
+                <div className={`row d-flex justify-content-center body mt-4 ${showStateTable ? 'd-none' : ''}`}>
+                    <div className="col-12">
+                        {calculosSimulacion && <RKTable calculosSimulacion={calculosSimulacion} />}
                     </div>
                 </div>
             </div>

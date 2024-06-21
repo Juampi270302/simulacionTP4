@@ -16,11 +16,15 @@ const SimulationParameters = ({setCalculosSimulacion}) => {
     useEffect(() => {
         validateTimeFinTC();
     }, [params.timeEndTC, params.timeTC, params.timeMin, params.timeInitTC])
+    useEffect(() => {
+        validateLimInfLimSupRK();
+    }, [params.limInfUnifTC, params.limSupUnifTC])
 
     const initialState = {
         probMasUno: false,
         minInitFinTC: false,
         horaInicioMax: false,
+        minLimInfLimSupRK: false,
         probActual: 0
     };
 
@@ -34,6 +38,8 @@ const SimulationParameters = ({setCalculosSimulacion}) => {
                 return {...errors, horaInicioMax: action.value};
             case "probActual":
                 return {...errors, probActual: action.value};
+            case "minLimInfLimSupRK":
+                return {...errors, minLimInfLimSupRK: action.value};
             default:
                 throw new Error();
         }
@@ -64,6 +70,14 @@ const SimulationParameters = ({setCalculosSimulacion}) => {
             setErrors({type: 'minInitFinTC', value: true});
         } else {
             setErrors({type: 'minInitFinTC', value: false});
+        }
+    }
+
+    const validateLimInfLimSupRK = () => {
+        if (params.limInfUnifTC >= params.limSupUnifTC) {
+            setErrors({type:'minLimInfLimSupRK', value: true});
+        } else {
+            setErrors({type:'minLimInfLimSupRK', value: false});
         }
     }
     const sendData = async () => {
@@ -189,6 +203,59 @@ const SimulationParameters = ({setCalculosSimulacion}) => {
                             </div>
                             {errors.minInitFinTC &&
                             <span className="errores">Error, la suma de los minutos despues de inicio y antes de final debe ser menor a el minimo de tiempo C</span>}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="row d-flex justify-content-center mt-2">
+                <div className="col-12 d-flex flex-column">
+                    <div className="card">
+                        <div className="card-body">
+                            <div className="row d-flex justify-content-center textoTitulo">
+                                Parametros Runge Kutta
+                            </div>
+                            <div className="row d-flex justify-content-center">
+                                <div className="col-6 d-flex flex-column text-center">
+                                    <label className="textoSubTitulo">Límite Inferior</label>
+                                    <input type="number"
+                                           className="form-control textoBasico"
+                                           defaultValue={20}
+                                           min={0}
+                                           step={0.1}
+                                           value={params.limInfUnifTC}
+                                           onChange={(event) => {
+                                               if (event.target.value >= 0) {
+                                                   updateParams({
+                                                       type: 'setLimiteInferior',
+                                                       value: parseFloat(event.target.value)
+                                                   })
+                                               } else {
+                                                   updateParams({ type: 'setLimiteInferior', value: parseFloat(0) })
+                                               }
+                                           }} />
+                                </div>
+                                <div className="col-6 d-flex flex-column text-center">
+                                    <label className="textoSubTitulo">Límite Superior</label>
+                                    <input type="number"
+                                           className="form-control textoBasico"
+                                           defaultValue={100}
+                                           min={0}
+                                           step={0.1}
+                                           value={params.limSupUnifTC}
+                                           onChange={(event) => {
+                                               if (event.target.value >= 0) {
+                                                   updateParams({
+                                                       type: 'setLimiteSuperior',
+                                                       value: parseFloat(event.target.value)
+                                                   })
+                                               } else {
+                                                   updateParams({ type: 'setLimiteSuperior', value: parseFloat(0) })
+                                               }
+                                           }} />
+                                </div>                  
+                            </div>
+                            {errors.minLimInfLimSupRK &&
+                            <span className="errores">Error, el limite superior debe ser mayor al limite inferior</span>}
                         </div>
                     </div>
                 </div>

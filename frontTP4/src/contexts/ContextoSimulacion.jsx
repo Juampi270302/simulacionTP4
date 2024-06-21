@@ -13,6 +13,8 @@ const initialState = {
     timeTD: 1,
     timeMin: 5,
     timeMax: 5,
+    limInfUnifTC: 20,
+    limSupUnifTC: 100,
     timeInitTC: 15,
     timeEndTC: 15,
     cantTimeSim: 100,
@@ -53,6 +55,10 @@ function reducer(params, action) {
             return {...params, initTimeView: action.value};
         case 'setCantSimIterations':
             return {...params, cantSimIterations: action.value};
+        case 'setLimiteInferior':
+            return {...params, limInfUnifTC: action.value};
+        case 'setLimiteSuperior':
+            return {...params, limSupUnifTC: action.value};
         default:
             throw new Error();
     }

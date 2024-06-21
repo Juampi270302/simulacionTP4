@@ -75,6 +75,10 @@ const TableStateVector = ({calculosSimulacion}) => {
                                 <th className="bordeArriba bordeAbajo"></th>
                                 <th className="bordeArriba bordeAbajo"></th>
                                 <th className="bordeIzquierdo bordeArriba bordeAbajo"></th>
+                                <th className="bordeArriba bordeAbajo">Tiempo Equipo C</th>
+                                <th className="bordeArriba bordeAbajo"></th>
+                                <th className="bordeArriba bordeAbajo"></th>
+                                <th className="bordeIzquierdo bordeArriba bordeAbajo"></th>
                                 <th className="bordeArriba bordeAbajo"></th>
                                 <th className="bordeArriba bordeAbajo">Fin trabajo</th>
                                 <th className="bordeArriba bordeAbajo"></th>
@@ -97,6 +101,10 @@ const TableStateVector = ({calculosSimulacion}) => {
                                 <th scope="col" className="bordeAbajo">Equipos en 2do plano</th>
                                 <th scope="col" className="bordeAbajo">Lugares disponibles en cola</th>
                                 <th scope="col" className="bordeAbajo">Contador de equipos</th>
+                                <th scope="col" className="bordeIzquierdo bordeAbajo">RND</th>
+                                <th scope="col" className="bordeAbajo">C</th>
+                                <th scope="col" className="bordeAbajo">N</th>
+                                <th scope="col" className="bordeAbajo">N en horas</th>
                                 <th scope="col" className="bordeIzquierdo bordeAbajo">RND fin trabajo</th>
                                 <th scope="col" className="bordeAbajo">Tiempo medio trabajo</th>
                                 <th scope="col" className="bordeAbajo">Tiempo de trabajo</th>
@@ -132,6 +140,31 @@ const TableStateVector = ({calculosSimulacion}) => {
                                     <td>{fila.colaVector.trabajoCSegundoPlano}</td>
                                     <td>{fila.colaVector.lugaresLibres}</td>
                                     <td>{fila.contadorEquipo}</td>
+                                    {fila.equipoCRK
+                                        ?
+                                        <>
+                                            <td className="bordeIzquierdo">
+                                                {fila.equipoCRK.rnd.toFixed(2)}
+                                            </td>
+                                            <td>
+                                                {fila.equipoCRK.valorC.toFixed(2)}
+                                            </td>
+                                            <td>
+                                                {fila.equipoCRK.valorN.toFixed(2)}
+                                            </td>
+                                            <td>
+                                                {fila.equipoCRK.valorNEnHoras.toFixed(2)}
+                                            </td>
+                                        </>
+                                        :
+                                        <>
+                                            <td className="bordeIzquierdo"></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </>
+
+                                    }
                                     <td className="bordeIzquierdo">{fila.finTrabajo.rndFinTrabajo !== null
                                         ? fila.finTrabajo.rndFinTrabajo.toFixed(2)
                                         : null}
