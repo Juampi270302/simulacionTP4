@@ -15,13 +15,13 @@ const initialState = {
     timeMax: 5,
     limInfUnifTC: 20,
     limSupUnifTC: 100,
-    timeInitTC: 15,
+    nSuma: 0.1,
+    nExpo: 0.09,
     timeEndTC: 15,
     cantTimeSim: 100,
     initTimeView: 50,
     cantSimIterations: 50
 };
-
 
 function reducer(params, action) {
     switch (action.type) {
@@ -45,8 +45,14 @@ function reducer(params, action) {
             return {...params, timeMin: action.value};
         case 'setTimeMax':
             return {...params, timeMax: action.value};
-        case 'setTimeInitTC':
-            return {...params, timeInitTC: action.value};
+        case 'setLimInfUnifTC':
+            return {...params, limInfUnifTC: action.value};
+        case 'setLimSupUnifTC':
+            return {...params, limSupUnifTC: action.value};
+        case 'setNSuma':
+            return {...params, nSuma: action.value};
+        case 'setNExpo':
+            return {...params, nExpo: action.value};
         case 'setTimeEndTC':
             return {...params, timeEndTC: action.value};
         case 'setCantTimeSim':
@@ -55,10 +61,6 @@ function reducer(params, action) {
             return {...params, initTimeView: action.value};
         case 'setCantSimIterations':
             return {...params, cantSimIterations: action.value};
-        case 'setLimiteInferior':
-            return {...params, limInfUnifTC: action.value};
-        case 'setLimiteSuperior':
-            return {...params, limSupUnifTC: action.value};
         default:
             throw new Error();
     }
