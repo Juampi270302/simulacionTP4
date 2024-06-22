@@ -14,15 +14,11 @@ const SimulationParameters = ({setCalculosSimulacion, setParams}) => {
         validateHoraInicio();
     }, [params.initTimeView, params.cantTimeSim]);
     useEffect(() => {
-        validateTimeFinTC();
-    }, [params.timeEndTC, params.timeTC, params.timeMin, params.timeInitTC])
-    useEffect(() => {
         validateLimInfLimSupRK();
     }, [params.limInfUnifTC, params.limSupUnifTC])
 
     const initialState = {
         probMasUno: false,
-        minInitFinTC: false,
         horaInicioMax: false,
         minLimInfLimSupRK: false,
         probActual: 0
@@ -32,8 +28,6 @@ const SimulationParameters = ({setCalculosSimulacion, setParams}) => {
         switch (action.type) {
             case 'probMasUno':
                 return {...errors, probMasUno: action.value};
-            case 'minInitFinTC':
-                return {...errors, minInitFinTC: action.value};
             case 'horaInicioMax':
                 return {...errors, horaInicioMax: action.value};
             case "probActual":
@@ -62,14 +56,6 @@ const SimulationParameters = ({setCalculosSimulacion, setParams}) => {
             setErrors({type: 'horaInicioMax', value: true});
         } else {
             setErrors({type: 'horaInicioMax', value: false});
-        }
-    }
-
-    const validateTimeFinTC = () => {
-        if (params.timeInitTC + params.timeEndTC >= (params.timeTC * 60) - params.timeMin) {
-            setErrors({type: 'minInitFinTC', value: true});
-        } else {
-            setErrors({type: 'minInitFinTC', value: false});
         }
     }
 
@@ -169,7 +155,7 @@ const SimulationParameters = ({setCalculosSimulacion, setParams}) => {
                             Parametros trabajos C
                         </div>
                         <div className="row d-flex justify-content-center">
-                            <div className="col-2 d-flex flex-column text-center">
+                            <div className="col-3 d-flex flex-column text-center">
                                 <label className="textoSubTitulo">Limite inferior Uniforme C</label>
                                 <input type="number"
                                        className="form-control textoBasico"
@@ -191,7 +177,7 @@ const SimulationParameters = ({setCalculosSimulacion, setParams}) => {
                                            }
                                        }}/>
                             </div>
-                            <div className="col-2 d-flex flex-column text-center">
+                            <div className="col-3 d-flex flex-column text-center">
                                 <label className="textoSubTitulo">Limite Superior Uniforme C</label>
                                 <input type="number"
                                        className="form-control textoBasico"
@@ -213,7 +199,7 @@ const SimulationParameters = ({setCalculosSimulacion, setParams}) => {
                                            }
                                        }}/>
                             </div>
-                            <div className="col-2 d-flex flex-column text-center">
+                            <div className="col-3 d-flex flex-column text-center">
                                 <label className="textoSubTitulo">Numero Ecuacion Suma</label>
                                 <input type="number"
                                        className="form-control textoBasico"
@@ -235,7 +221,7 @@ const SimulationParameters = ({setCalculosSimulacion, setParams}) => {
                                            }
                                        }}/>
                             </div>
-                            <div className="col-2 d-flex flex-column text-center">
+                            <div className="col-3 d-flex flex-column text-center">
                                 <label className="textoSubTitulo">Numero Ecuacion Exponente</label>
                                 <input type="number"
                                        className="form-control textoBasico "
@@ -257,19 +243,9 @@ const SimulationParameters = ({setCalculosSimulacion, setParams}) => {
                                            }
                                        }}/>
                             </div>
-                            <div className="col-2 d-flex flex-column text-center">
-                                <label className="textoSubTitulo">Minutos antes del final</label>
-                                <input type="number" className="form-control textoBasico" defaultValue={15} min={1}
-                                       onChange={() => {
-                                           updateParams({
-                                               type: 'setTimeEndTC',
-                                               value: parseFloat(event.target.value)
-                                           })
-                                       }}/>
-                            </div>
                         </div>
-                        {errors.minInitFinTC &&
-                            <span className="errores">Error, la suma de los minutos despues de inicio y antes de final debe ser menor a el minimo de tiempo C</span>}
+                        {errors.minLimInfLimSupRK &&
+                            <span className="errores">Error, El limite inferior no puede ser mayor al superior</span>}
                     </div>
                 </div>
             </div>

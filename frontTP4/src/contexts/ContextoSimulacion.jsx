@@ -17,7 +17,6 @@ const initialState = {
     limSupUnifTC: 100,
     nSuma: 0.1,
     nExpo: 0.09,
-    timeEndTC: 15,
     cantTimeSim: 100,
     initTimeView: 50,
     cantSimIterations: 50
@@ -53,8 +52,6 @@ function reducer(params, action) {
             return {...params, nSuma: action.value};
         case 'setNExpo':
             return {...params, nExpo: action.value};
-        case 'setTimeEndTC':
-            return {...params, timeEndTC: action.value};
         case 'setCantTimeSim':
             return {...params, cantTimeSim: action.value};
         case 'setInitTimeView':
