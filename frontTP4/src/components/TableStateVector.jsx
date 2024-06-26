@@ -93,7 +93,7 @@ const TableStateVector = ({calculosSimulacion}) => {
                                 <th scope="col" className="bordeIzquierdo bordeAbajo">Reloj</th>
                                 <th scope="col" className="bordeIzquierdo bordeAbajo">RND llegada</th>
                                 <th scope="col" className="bordeAbajo">Tiempo entre llegadas</th>
-                                <th scope="col" className="bordeAbajo">Hora proxima llegada</th>
+                                <th scope="col" className="bordeAbajo hora">Hora proxima llegada</th>
                                 <th scope="col" className="bordeAbajo">RND tipo trabajo</th>
                                 <th scope="col" className="bordeAbajo">Tipo trabajo</th>
                                 <th scope="col" className="bordeIzquierdo bordeAbajo">Cola comun</th>
@@ -108,7 +108,7 @@ const TableStateVector = ({calculosSimulacion}) => {
                                 <th scope="col" className="bordeIzquierdo bordeAbajo">RND fin trabajo</th>
                                 <th scope="col" className="bordeAbajo">Tiempo medio trabajo</th>
                                 <th scope="col" className="bordeAbajo">Tiempo de trabajo</th>
-                                <th scope="col" className="bordeAbajo"> Hora fin trabajo</th>
+                                <th scope="col" className="bordeAbajo hora"> Hora fin trabajo</th>
                                 <th scope="col" className="bordeIzquierdo bordeAbajo">Estado tecnico</th>
                                 <th scope="col" className="bordeIzquierdo bordeAbajo">Tiempo ocupacion</th>
                                 <th scope="col" className="bordeDerecho bordeAbajo">Tiempo permanencia equipos</th>
@@ -130,7 +130,7 @@ const TableStateVector = ({calculosSimulacion}) => {
                                         ? fila.llegada.tiempoEntreLlegada.toFixed(2)
                                         : null}
                                     </td>
-                                    <td>{fila.llegada.horaProximaLlegada.toFixed(2)}</td>
+                                    <td className="hora">{fila.llegada.horaProximaLlegada.toFixed(2)}</td>
                                     <td>{fila.llegada.rndTipoTrabajo !== null ?
                                         fila.llegada.rndTipoTrabajo.toFixed(2)
                                         : null}</td>
@@ -147,7 +147,7 @@ const TableStateVector = ({calculosSimulacion}) => {
                                                 {fila.equipoCRK.rnd.toFixed(2)}
                                             </td>
                                             <td>
-                                                {fila.equipoCRK.valorC.toFixed(2)}
+                                                {fila.equipoCRK.valorC}
                                             </td>
                                             <td>
                                                 {fila.equipoCRK.valorN.toFixed(2)}
@@ -178,7 +178,7 @@ const TableStateVector = ({calculosSimulacion}) => {
                                         : null
                                     }
                                     </td>
-                                    <td>{fila.finTrabajo.horaFinTrabajo !== null
+                                    <td className="hora">{fila.finTrabajo.horaFinTrabajo !== null
                                         ? fila.finTrabajo.horaFinTrabajo.toFixed(2)
                                         : null
                                     }</td>
@@ -254,7 +254,7 @@ const TableStateVector = ({calculosSimulacion}) => {
                                                         (equipo.valorN/60).toFixed(2)
                                                         : null}
                                                 </td>
-                                                <td>
+                                                <td className="hora">
                                                     {filasPagina[indice - 1] === undefined
                                                         ? <tr className="textoSubTitulo">Hora cambio TC</tr>
                                                         : filasPagina[indice - 1].equipos[index] === undefined
@@ -265,7 +265,7 @@ const TableStateVector = ({calculosSimulacion}) => {
                                                         ? equipo.horaCambioTrabajoC.toFixed(2)
                                                         : null}
                                                 </td>
-                                                <td>
+                                                <td className="hora">
                                                     {filasPagina[indice - 1] === undefined
                                                         ? <tr className="textoSubTitulo">Hora reanudacion TC</tr>
                                                         : filasPagina[indice - 1].equipos[index] === undefined

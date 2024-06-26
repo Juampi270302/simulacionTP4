@@ -86,3 +86,6 @@ th, td {
     border: 1px solid #ccc;
 }
 
+.hora{
+    background-color: yellow !important;
+}

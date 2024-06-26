@@ -1,4 +1,15 @@
 import React, { useState } from 'react'
+import t from "../images/t.png"
+import C from "../images/C.png"
+import k1 from "../images/k1.png"
+import CmK1s2 from "../images/CmK1s2.png"
+import K2 from "../images/K2.png"
+import CmK2s2 from "../images/CmK2s2.png"
+import K3 from "../images/K3.png"
+import CmK3 from "../images/CmK3.png"
+import K4 from "../images/K4.png"
+import CTm1 from "../images/CTm1.png"
+
 
 const RKTable = ({ calculosSimulacion, params }) => {
     const equipos = calculosSimulacion.datosEquiposRK
@@ -65,13 +76,15 @@ const RKTable = ({ calculosSimulacion, params }) => {
                 <select onChange={handleSelectChange} className='form-select'>
                     {equipos.map((equipo) => (
                         <option key={equipo.idEquipo} value={equipo.idEquipo}>
-                            E{equipo.idEquipo} C={equipo.valorC.toFixed(4)} N={equipo.valorN.toFixed(4)}
+                            E{equipo.idEquipo} C={equipo.valorC} N={equipo.valorN.toFixed(4)}
                         </option>
                     ))}
                 </select>
             </div>
-            <table>
-                <thead>
+            <div className="container-fluid justify-content-center table-responsive table-container">
+
+                <table>
+                    <thead>
                     <tr>
                         <th>h</th>
                         <th>{h}</th>
@@ -85,25 +98,25 @@ const RKTable = ({ calculosSimulacion, params }) => {
                         <th>dC/dt = {params.nSuma} + e^({params.nExpo}*C)</th>
                     </tr>
 
-                </thead>
-            </table>
+                    </thead>
+                </table>
 
-            <table className='table table-bordered table-hover'>
-                <thead>
+                <table className='table table-bordered table-hover'>
+                    <thead>
                     <tr>
-                        <th>t</th>
-                        <th>C</th>
-                        <th>k1</th>
-                        <th>C+k1/2</th>
-                        <th>k2</th>
-                        <th>C+k2/2</th>
-                        <th>k3</th>
-                        <th>C+k3</th>
-                        <th>k4</th>
-                        <th>C+1</th>
+                        <th className="text-center"><img src={t} alt={"t"}></img></th>
+                        <th className="text-center"><img src={C}/></th>
+                        <th className="text-center"><img src={k1}/></th>
+                        <th className="text-center"><img src={CmK1s2}/></th>
+                        <th className="text-center"><img src={K2}/></th>
+                        <th className="text-center"><img src={CmK2s2}/></th>
+                        <th className="text-center"><img src={K3}/></th>
+                        <th className="text-center"><img src={CmK3}/></th>
+                        <th className="text-center"><img src={K4}/></th>
+                        <th className="text-center"><img src={CTm1}/></th>
                     </tr>
-                </thead>
-                <tbody>
+                    </thead>
+                    <tbody>
                     {rows.map((row, index) => (
                         <tr key={index} className={index === rows.length - 1 ? 'table-dark' : ''}>
                             <td>{row.t.toFixed(2)}</td>
@@ -118,8 +131,9 @@ const RKTable = ({ calculosSimulacion, params }) => {
                             <td>{row.Cn.toFixed(6)}</td>
                         </tr>
                     ))}
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </>
     )
 }
